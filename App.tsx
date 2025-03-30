@@ -1,12 +1,24 @@
+import { Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { GluestackUIProvider, Text } from '@gluestack-ui/themed';
+import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { config } from './config/gluestack-ui.config';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({ Poppins_400Regular, Poppins_700Bold })
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GluestackUIProvider config={config}>
+      <View style={styles.container}>
+        <StatusBar
+          style="dark"
+          backgroundColor='transparent'
+          translucent
+        />
+        {fontsLoaded ? <Text color="$green700" fontSize={35} >Home</Text> : <View />}
+      </View>
+    </GluestackUIProvider>
   );
 }
 
