@@ -13,6 +13,8 @@ import { DayList } from "../storage/storageConfig";
 
 export function History() {
   const [passwordsDayLists, setPasswordsDayLists] = useState<DayList[]>([])
+  const [clipboard, setClipboard] = useState('')
+
   const { goBack } = useNavigation()
 
   async function fetchPasswords() {
@@ -30,6 +32,10 @@ export function History() {
   useEffect(() => {
     fetchPasswords()
   }, [])
+
+  function copyPassword(password: string) {
+    setClipboard(password)
+  }
 
   return (
     <>
@@ -75,7 +81,13 @@ export function History() {
         <SectionList
           sections={passwordsDayLists}
           keyExtractor={(item) => item}
-          renderItem={({ section, index }) => <PasswordCard content={section.data[index]} />}
+          renderItem={({ section, index }) => (
+            <PasswordCard
+              content={section.data[index]}
+              clipboard={clipboard}
+              copyPassword={copyPassword}
+            />
+          )}
           renderSectionHeader={({ section }) => (
             <Heading
               color="$green800"

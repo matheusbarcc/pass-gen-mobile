@@ -1,13 +1,28 @@
 import { HStack, Text } from "@gluestack-ui/themed"
-import { DsButton } from "./DsButton"
+import * as Clipboard from 'expo-clipboard'
 
 import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
+import Check from "phosphor-react-native/src/icons/Check";
+
+import { DsButton } from "./DsButton"
+import { useState } from "react";
 
 type Props = {
   content: string
+  clipboard: string
+  copyPassword: (password: string) => void
 }
 
-export function PasswordCard({ content }: Props) {
+export function PasswordCard({ content, clipboard, copyPassword }: Props) {
+  async function handleCopyPassword() {
+    await Clipboard.setStringAsync(content)
+
+    const password = await Clipboard.getStringAsync()
+    copyPassword(password)
+  }
+
+  const isPassCopied = clipboard === content
+
   return (
     <HStack
       mb="$2"
@@ -27,9 +42,20 @@ export function PasswordCard({ content }: Props) {
         w="$12"
         h="$12"
         borderRadius="$md"
-        type="secondary"
+        type={"secondary"}
+        isDisabled={isPassCopied}
+        sx={{
+          ":disabled": {
+            opacity: 0.6
+          }
+        }}
+        onPress={handleCopyPassword}
       >
-        <ClipboardText weight="bold" color="#103214" />
+        {isPassCopied ? (
+          <Check weight="bold" color="#103214" />
+        ) : (
+          <ClipboardText weight="bold" color="#103214" />
+        )}
       </DsButton>
     </HStack>
   )

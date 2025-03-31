@@ -12,6 +12,8 @@ import { createPassword } from "../storage/create-password";
 
 export function Home() {
   const [password, setPassword] = useState('')
+  const [clipboard, setClipboard] = useState('')
+
   const { navigate } = useNavigation()
 
   async function handleNewPassword() {
@@ -21,11 +23,15 @@ export function Home() {
 
   function handleCopyPassword() {
     password && Clipboard.setStringAsync(password)
+
+    setClipboard(password)
   }
 
   function handleHistory() {
     navigate('history')
   }
+
+  const isPassCopied = clipboard === password && clipboard !== ""
 
   return (
     <>
@@ -60,7 +66,7 @@ export function Home() {
         >
           <HStack
             w="$full"
-            h="$16"
+            h="$20"
             p="$4"
             justifyContent="center"
             alignItems="center"
@@ -102,8 +108,18 @@ export function Home() {
         borderTopRightRadius="$3xl"
       >
         <DsButton title="Gerar senha" onPress={handleNewPassword} />
-        <DsButton title="Copiar" type="secondary" onPress={handleCopyPassword}>
-          <ClipboardText weight="bold" color="#103214" />
+        <DsButton
+          title={isPassCopied ? "Copiada!" : "Copiar"}
+          type="secondary"
+          isDisabled={isPassCopied || password === ""}
+          sx={{
+            ":disabled": {
+              opacity: 0.6
+            }
+          }}
+          onPress={handleCopyPassword}
+        >
+          {!isPassCopied && <ClipboardText weight="bold" color="#103214" />}
         </DsButton>
       </VStack>
     </>
