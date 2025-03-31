@@ -383,7 +383,7 @@ export const gluestackUIConfig = createConfig({
       borderLight800: '#404040',
       borderLight900: '#262626',
       borderLight950: '#171717',
-      background: '#F1F5EC',
+      background: '#ECF2E3',
       base100: '#F9FBF7',
       base300: '#ECEEEA',
       base500: '#E4E4E4',
@@ -542,8 +542,8 @@ export const gluestackUIConfig = createConfig({
       extraBlack: '950',
     },
     fonts: {
-      heading: 'Poppins_700Bold',
-      body: 'Poppins_400Regular',
+      heading: 'Roboto_700Bold',
+      body: 'Roboto_400Regular',
     },
     fontSizes: {
       '2xs': 10,

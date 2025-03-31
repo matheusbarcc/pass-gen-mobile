@@ -1,32 +1,21 @@
-import { Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
-import { GluestackUIProvider, Text } from '@gluestack-ui/themed';
-import { useFonts } from 'expo-font';
+import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { config } from './config/gluestack-ui.config';
+import { Routes } from './src/routes';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ Poppins_400Regular, Poppins_700Bold })
+  const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
 
   return (
     <GluestackUIProvider config={config}>
-      <View style={styles.container}>
-        <StatusBar
-          style="dark"
-          backgroundColor='transparent'
-          translucent
-        />
-        {fontsLoaded ? <Text color="$green700" fontSize={35} >Home</Text> : <View />}
-      </View>
+      <StatusBar
+        style="dark"
+        backgroundColor='transparent'
+        translucent
+      />
+      {fontsLoaded ? <Routes /> : <View />}
     </GluestackUIProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
