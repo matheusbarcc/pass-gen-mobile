@@ -1,39 +1,35 @@
 import { Heading, HStack, Pressable, Text, VStack } from "@gluestack-ui/themed";
 
 import { SectionList } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
 import { PasswordCard } from "../components/PasswordCard";
 import { EmptyList } from "../components/EmptyList";
 import { useNavigation } from "@react-navigation/native";
+import { getAllPasswords } from "../storage/get-all-passwords";
+import { DayList } from "../storage/storageConfig";
 
 
 export function History() {
-  const [passwords, setPasswords] = useState([
-    {
-      title: '30.03.2025',
-      data: ['29wRJKRJ', 'djks90aj', 'u8d90sajj',]
-    },
-    {
-      title: '29.03.2025',
-      data: ['j89dsaj89', 'kd980saj']
-    },
-    {
-      title: '28.03.2025',
-      data: ['90djsa890jd']
-    },
-    {
-      title: '27.03.2025',
-      data: ['di90saj89d', 'mdu9sau90d']
-    },
-  ])
-
+  const [passwordsDayLists, setPasswordsDayLists] = useState<DayList[]>([])
   const { goBack } = useNavigation()
+
+  async function fetchPasswords() {
+    const dayLists = await getAllPasswords()
+
+    console.log(dayLists)
+
+    setPasswordsDayLists(dayLists)
+  }
 
   function handleGoBack() {
     goBack()
   }
+
+  useEffect(() => {
+    fetchPasswords()
+  }, [])
 
   return (
     <>
@@ -77,7 +73,7 @@ export function History() {
         flex={1}
       >
         <SectionList
-          sections={passwords}
+          sections={passwordsDayLists}
           keyExtractor={(item) => item}
           renderItem={({ section, index }) => <PasswordCard content={section.data[index]} />}
           renderSectionHeader={({ section }) => (
@@ -91,7 +87,7 @@ export function History() {
             </Heading>
           )}
           contentContainerStyle={
-            passwords.length === 0 ? {
+            passwordsDayLists.length === 0 ? {
               flex: 1,
               justifyContent: 'center',
               paddingBottom: 32,

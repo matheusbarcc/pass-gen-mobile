@@ -1,6 +1,6 @@
 type DayList = {
-  date: string
-  passwords: string[]
+  title: string
+  data: string[]
 }
 
 const PASSWORD_COLLETION = '@pass-gen:passwords'

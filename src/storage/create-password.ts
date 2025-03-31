@@ -8,19 +8,18 @@ export async function createPassword() {
     const storedPasswords = await getAllPasswords()
     const newPassword = uuidv4().slice(1, 8)
 
+    const today = new Date().toLocaleDateString('pt-BR').replaceAll('/', '.')
 
-    const today = new Date('2025-04-02').toLocaleDateString('pt-BR').replaceAll('/', '.')
-
-    const dayAlreadyExists = storedPasswords.find(daylist => daylist.date === today)
+    const dayAlreadyExists = storedPasswords.find(daylist => daylist.title === today)
 
     if (dayAlreadyExists) {
       storedPasswords.map(daylist => {
-        if (daylist.date === today) {
-          daylist.passwords.push(newPassword)
+        if (daylist.title === today) {
+          daylist.data.push(newPassword)
         }
       })
     } else {
-      storedPasswords.push({ date: today, passwords: [newPassword] })
+      storedPasswords.push({ title: today, data: [newPassword] })
     }
 
     await AsyncStorage.setItem(PASSWORD_COLLETION, JSON.stringify(storedPasswords))

@@ -1,27 +1,26 @@
 import { HStack, Text, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
-import { v4 as uuidv4 } from 'uuid'
-import * as Clipboard from 'expo-clipboard'
+import * as Clipboard from 'expo-clipboard';
 
 import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
 
-import { DsButton } from "../components/DsButton";
 import { useState } from "react";
+import { DsButton } from "../components/DsButton";
+import { createPassword } from "../storage/create-password";
 
 export function Home() {
   const [password, setPassword] = useState('')
   const { navigate } = useNavigation()
 
-  function handleNewPassword() {
-    const newPassword = uuidv4().slice(1, 8)
-
+  async function handleNewPassword() {
+    const newPassword = await createPassword()
     setPassword(newPassword)
   }
 
   function handleCopyPassword() {
-    Clipboard.setStringAsync(password)
+    password && Clipboard.setStringAsync(password)
   }
 
   function handleHistory() {
