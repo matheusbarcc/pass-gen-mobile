@@ -1,14 +1,28 @@
-import { HStack, Icon, Pressable, Text, VStack } from "@gluestack-ui/themed";
+import { HStack, Text, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { v4 as uuidv4 } from 'uuid'
+import * as Clipboard from 'expo-clipboard'
 
+import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
-import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 
 import { DsButton } from "../components/DsButton";
+import { useState } from "react";
 
 export function Home() {
+  const [password, setPassword] = useState('')
   const { navigate } = useNavigation()
+
+  function handleNewPassword() {
+    const newPassword = uuidv4().slice(1, 8)
+
+    setPassword(newPassword)
+  }
+
+  function handleCopyPassword() {
+    Clipboard.setStringAsync(password)
+  }
 
   function handleHistory() {
     navigate('history')
@@ -27,7 +41,7 @@ export function Home() {
             PassGen
           </Text>
 
-          <Pressable
+          <DsButton
             h="$12"
             w="$12"
             borderRadius="$lg"
@@ -37,7 +51,7 @@ export function Home() {
             onPress={handleHistory}
           >
             <ClockCounterClockwise color="#FFF" />
-          </Pressable>
+          </DsButton>
         </HStack>
 
         <VStack
@@ -47,6 +61,7 @@ export function Home() {
         >
           <HStack
             w="$full"
+            h="$16"
             p="$4"
             justifyContent="center"
             alignItems="center"
@@ -63,7 +78,9 @@ export function Home() {
                 left: 24,
               }}
             />
-            <Text fontFamily="$body" color="$black" fontSize="$2xl">29wRJKRJ</Text>
+            <Text fontFamily="$body" color="$black" fontSize="$2xl">
+              {password ? password : <Text color='$base500'>Senha</Text>}
+            </Text>
           </HStack>
           <Text
             w="$64"
@@ -85,8 +102,8 @@ export function Home() {
         borderTopLeftRadius="$3xl"
         borderTopRightRadius="$3xl"
       >
-        <DsButton title="Gerar senha" />
-        <DsButton title="Copiar" type="secondary">
+        <DsButton title="Gerar senha" onPress={handleNewPassword} />
+        <DsButton title="Copiar" type="secondary" onPress={handleCopyPassword}>
           <ClipboardText weight="bold" color="#103214" />
         </DsButton>
       </VStack>

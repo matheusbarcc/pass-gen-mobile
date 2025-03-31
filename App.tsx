@@ -1,7 +1,9 @@
-import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import 'react-native-get-random-values';
+
+import { Roboto_400Regular, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { config } from './config/gluestack-ui.config';
 import { Routes } from './src/routes';
 
