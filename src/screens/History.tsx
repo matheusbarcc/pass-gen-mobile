@@ -20,9 +20,9 @@ export function History() {
   async function fetchPasswords() {
     const dayLists = await getAllPasswords()
 
-    console.log(dayLists)
+    const invertedDayLists = dayLists.reverse()
 
-    setPasswordsDayLists(dayLists)
+    setPasswordsDayLists(invertedDayLists)
   }
 
   function handleGoBack() {

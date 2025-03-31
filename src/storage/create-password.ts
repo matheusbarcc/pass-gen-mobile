@@ -15,7 +15,7 @@ export async function createPassword() {
     if (dayAlreadyExists) {
       storedPasswords.map(daylist => {
         if (daylist.title === today) {
-          daylist.data.push(newPassword)
+          daylist.data.unshift(newPassword)
         }
       })
     } else {

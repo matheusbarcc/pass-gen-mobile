@@ -9,6 +9,8 @@ import Lock from "phosphor-react-native/src/icons/Lock";
 import { useState } from "react";
 import { DsButton } from "../components/DsButton";
 import { createPassword } from "../storage/create-password";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PASSWORD_COLLETION } from "../storage/storageConfig";
 
 export function Home() {
   const [password, setPassword] = useState('')
@@ -18,12 +20,12 @@ export function Home() {
 
   async function handleNewPassword() {
     const newPassword = await createPassword()
+    // await AsyncStorage.removeItem(PASSWORD_COLLETION)
     setPassword(newPassword)
   }
 
   function handleCopyPassword() {
     password && Clipboard.setStringAsync(password)
-
     setClipboard(password)
   }
 
