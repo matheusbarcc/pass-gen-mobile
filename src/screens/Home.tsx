@@ -6,7 +6,7 @@ import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DsButton } from "../components/DsButton";
 import { createPassword } from "../storage/create-password";
 
@@ -35,7 +35,7 @@ export function Home() {
   return (
     <>
       <VStack
-        pt="$16"
+        pt="$11"
         px="$6"
         bg="$background"
         flex={1}
@@ -98,7 +98,9 @@ export function Home() {
         </VStack>
       </VStack>
       <VStack
-        p="$6"
+        pt="$6"
+        pb="$9"
+        px="$6"
         bg="$base100"
         gap="$3"
         borderWidth={1}

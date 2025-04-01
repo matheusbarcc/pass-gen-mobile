@@ -542,8 +542,8 @@ export const gluestackUIConfig = createConfig({
       extraBlack: '950',
     },
     fonts: {
-      heading: 'Roboto_700Bold',
-      body: 'Roboto_400Regular',
+      heading: 'Jersey20_400Regular',
+      body: 'Jersey20_400Regular',
     },
     fontSizes: {
       '2xs': 10,

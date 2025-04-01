@@ -50,7 +50,7 @@ export function History() {
     <>
       <HStack
         bg="$base100"
-        pt="$16"
+        pt="$11"
         pb="$7"
         alignItems="flex-end"
         justifyContent="center"
@@ -125,7 +125,9 @@ export function History() {
         />
       </VStack>
       <VStack
-        p="$6"
+        pt="$6"
+        pb="$9"
+        px="$6"
         bg="$base100"
         gap="$3"
         borderWidth={1}
