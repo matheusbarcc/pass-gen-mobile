@@ -1,14 +1,18 @@
 import { Heading, HStack, Pressable, Text, VStack } from "@gluestack-ui/themed";
-
+import { useNavigation } from "@react-navigation/native";
 import { SectionList } from "react-native";
 import { useEffect, useState } from "react";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
+import Trash from "phosphor-react-native/src/icons/Trash";
+
 import { PasswordCard } from "../components/PasswordCard";
 import { EmptyList } from "../components/EmptyList";
-import { useNavigation } from "@react-navigation/native";
+import { DsButton } from "../components/DsButton";
+
 import { getAllPasswords } from "../storage/get-all-passwords";
 import { DayList } from "../storage/storageConfig";
+import { removeAllPasswords } from "../storage/remove-all-passwords";
 
 
 export function History() {
@@ -23,6 +27,11 @@ export function History() {
     const invertedDayLists = dayLists.reverse()
 
     setPasswordsDayLists(invertedDayLists)
+  }
+
+  async function handleClearPasswords() {
+    await removeAllPasswords()
+    setPasswordsDayLists([])
   }
 
   function handleGoBack() {
@@ -45,6 +54,8 @@ export function History() {
         pb="$7"
         alignItems="flex-end"
         justifyContent="center"
+        borderWidth={1}
+        borderColor="$base500"
         borderBottomLeftRadius="$3xl"
         borderBottomRightRadius="$3xl"
       >
@@ -100,7 +111,7 @@ export function History() {
           )}
           contentContainerStyle={
             passwordsDayLists.length === 0 ? {
-              flex: 1,
+              height: '100%',
               justifyContent: 'center',
               paddingBottom: 32,
             } : {
@@ -112,6 +123,28 @@ export function History() {
             <EmptyList />
           }
         />
+      </VStack>
+      <VStack
+        p="$6"
+        bg="$base100"
+        gap="$3"
+        borderWidth={1}
+        borderColor="$base500"
+        borderTopLeftRadius="$3xl"
+        borderTopRightRadius="$3xl"
+      >
+        <DsButton
+          title="Limpar senhas"
+          isDisabled={passwordsDayLists.length < 1}
+          sx={{
+            ":disabled": {
+              opacity: 0.6
+            }
+          }}
+          onPress={handleClearPasswords}
+        >
+          <Trash weight="bold" color="#FFF" />
+        </DsButton>
       </VStack>
     </>
   )

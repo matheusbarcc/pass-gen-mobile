@@ -101,11 +101,11 @@ export function Home() {
         </VStack>
       </VStack>
       <VStack
-        pt="$6"
-        pb="$16"
-        px="$6"
+        p="$6"
         bg="$base100"
         gap="$3"
+        borderWidth={1}
+        borderColor="$base500"
         borderTopLeftRadius="$3xl"
         borderTopRightRadius="$3xl"
       >

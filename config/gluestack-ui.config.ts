@@ -154,7 +154,7 @@ export const gluestackUIConfig = createConfig({
       green400: '#4ade80',
       green500: '#22c55e',
       green600: '#16a34a',
-      green700: '#103214',
+      green700: '#17461C',
       green800: '#071508',
       green900: '#14532d',
       lime50: '#f7fee7',
