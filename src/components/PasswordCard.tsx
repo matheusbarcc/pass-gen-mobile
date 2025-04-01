@@ -1,11 +1,10 @@
-import { HStack, Text } from "@gluestack-ui/themed"
-import * as Clipboard from 'expo-clipboard'
+import { HStack, Text } from "@gluestack-ui/themed";
+import * as Clipboard from 'expo-clipboard';
 
-import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import Check from "phosphor-react-native/src/icons/Check";
+import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 
-import { DsButton } from "./DsButton"
-import { useState } from "react";
+import { DsButton } from "./DsButton";
 
 type Props = {
   content: string

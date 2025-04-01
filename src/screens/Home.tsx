@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { HStack, Text, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from 'expo-clipboard';
@@ -6,7 +7,6 @@ import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
 
-import { useEffect, useState } from "react";
 import { DsButton } from "../components/DsButton";
 import { createPassword } from "../storage/create-password";
 

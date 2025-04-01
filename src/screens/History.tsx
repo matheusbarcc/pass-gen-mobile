@@ -1,18 +1,18 @@
-import { Heading, HStack, Pressable, Text, VStack } from "@gluestack-ui/themed";
-import { useNavigation } from "@react-navigation/native";
-import { SectionList } from "react-native";
 import { useEffect, useState } from "react";
+import { SectionList } from "react-native";
+import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
+import { useNavigation } from "@react-navigation/native";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
 import Trash from "phosphor-react-native/src/icons/Trash";
 
-import { PasswordCard } from "../components/PasswordCard";
-import { EmptyList } from "../components/EmptyList";
 import { DsButton } from "../components/DsButton";
+import { EmptyList } from "../components/EmptyList";
+import { PasswordCard } from "../components/PasswordCard";
 
 import { getAllPasswords } from "../storage/get-all-passwords";
-import { DayList } from "../storage/storageConfig";
 import { removeAllPasswords } from "../storage/remove-all-passwords";
+import { DayList } from "../storage/storageConfig";
 
 
 export function History() {

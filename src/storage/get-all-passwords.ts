@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+
 import { DayList, PASSWORD_COLLETION } from "./storageConfig"
 
 export async function getAllPasswords() {
