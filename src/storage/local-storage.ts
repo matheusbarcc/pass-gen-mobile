@@ -26,15 +26,3 @@ export async function storageRemoveAll(key: string) {
         throw error
     }
 }
-
-export async function storageRemoveByValue(key: string, value: string) {
-    try {
-        const storage = await storageGetAll(key)
-
-        const newStorage = storage.filter((p: any) => p.value !== value)
-
-        await AsyncStorage.setItem(key, JSON.stringify(newStorage))
-    } catch (error) {
-        throw Error
-    }
-}

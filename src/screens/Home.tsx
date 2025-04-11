@@ -6,6 +6,7 @@ import * as Clipboard from 'expo-clipboard';
 import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
+import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 
 import { DsButton } from "../components/DsButton";
 
@@ -110,6 +111,10 @@ export function Home() {
         borderTopRightRadius="$3xl"
       >
         <DsButton title="Gerar senha" onPress={handleNewPassword} />
+        <DsButton 
+          title="Salvar" type="secondary">
+          <FloppyDisk weight="bold" color="#103214" />
+        </DsButton>
         <DsButton
           title={isPassCopied ? "Copiada!" : "Copiar"}
           type="secondary"
