@@ -1,6 +1,6 @@
 type Password = {
   title: string
-  password: string
+  value: string
 }
 
 const PASSWORD_COLLETION = '@pass-gen:passwords'

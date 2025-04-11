@@ -8,7 +8,8 @@ import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterC
 import Lock from "phosphor-react-native/src/icons/Lock";
 
 import { DsButton } from "../components/DsButton";
-import { createPassword } from "../storage/create-password";
+
+import { generatePassword } from "../services/generate-password";
 
 export function Home() {
   const [password, setPassword] = useState('')
@@ -17,7 +18,7 @@ export function Home() {
   const { navigate } = useNavigation()
 
   async function handleNewPassword() {
-    const newPassword = await createPassword()
+    const newPassword = await generatePassword()
     setPassword(newPassword)
   }
 

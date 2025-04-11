@@ -10,10 +10,10 @@ import { DsButton } from "../components/DsButton";
 import { EmptyList } from "../components/EmptyList";
 import { PasswordCard } from "../components/PasswordCard";
 
-import { getAllPasswords } from "../storage/get-all-passwords";
-import { removeAllPasswords } from "../storage/remove-all-passwords";
+import { getAllPasswords } from "../storage/storage-get-all";
+import { removeAllPasswords } from "../storage/storage-remove-all";
 import { DayList } from "../storage/storageConfig";
-import { removePasswordByValue } from "../storage/remove-password-by-value";
+import { removePasswordByValue } from "../storage/storageRemoveByValue";
 
 
 export function History() {
