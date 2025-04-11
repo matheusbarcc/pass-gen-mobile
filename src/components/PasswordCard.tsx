@@ -14,12 +14,16 @@ type Props = {
   removePassword: (password: string) => void
 }
 
-export function PasswordCard({ content, clipboard, copyPassword }: Props) {
+export function PasswordCard({ content, clipboard, copyPassword, removePassword }: Props) {
   async function handleCopyPassword() {
     await Clipboard.setStringAsync(content)
 
     const password = await Clipboard.getStringAsync()
     copyPassword(password)
+  }
+
+  async function handleRemovePassword() {
+    removePassword(content)
   }
 
   const isPassCopied = clipboard === content
@@ -45,6 +49,7 @@ export function PasswordCard({ content, clipboard, copyPassword }: Props) {
         mr="$2"
         borderRadius="$md"
         type="destructive"
+        onPress={handleRemovePassword}
       >
         <Trash weight="bold" color="#ab0202" />
       </DsButton>

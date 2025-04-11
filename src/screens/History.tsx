@@ -13,6 +13,7 @@ import { PasswordCard } from "../components/PasswordCard";
 import { getAllPasswords } from "../storage/get-all-passwords";
 import { removeAllPasswords } from "../storage/remove-all-passwords";
 import { DayList } from "../storage/storageConfig";
+import { removePasswordByValue } from "../storage/remove-password-by-value";
 
 
 export function History() {
@@ -32,6 +33,10 @@ export function History() {
   async function handleClearPasswords() {
     await removeAllPasswords()
     setPasswordsDayLists([])
+  }
+  
+  async function removePassword(value: string) {
+    await removePasswordByValue(value)
   }
 
   function handleGoBack() {
@@ -97,6 +102,7 @@ export function History() {
               content={section.data[index]}
               clipboard={clipboard}
               copyPassword={copyPassword}
+              removePassword={removePassword}
             />
           )}
           renderSectionHeader={({ section }) => (

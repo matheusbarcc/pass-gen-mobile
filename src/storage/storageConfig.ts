@@ -1,8 +1,8 @@
-type DayList = {
+type Password = {
   title: string
-  data: string[]
+  password: string
 }
 
 const PASSWORD_COLLETION = '@pass-gen:passwords'
 
-export { PASSWORD_COLLETION, DayList }
+export { PASSWORD_COLLETION, Password }
