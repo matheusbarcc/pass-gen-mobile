@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SectionList } from "react-native";
+import { FlatList, SectionList } from "react-native";
 import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 
@@ -10,29 +10,27 @@ import { DsButton } from "../components/DsButton";
 import { EmptyList } from "../components/EmptyList";
 import { PasswordCard } from "../components/PasswordCard";
 
-import { getAllPasswords } from "../storage/storage-get-all";
-import { removeAllPasswords } from "../storage/storage-remove-all";
-import { DayList } from "../storage/storageConfig";
-import { removePasswordByValue } from "../storage/storageRemoveByValue";
+import { Password } from "../storage/storageConfig";
+import { fetchPasswords } from "../services/fetch-passwords";
+import { removeAllPasswords } from "../services/remove-all-passwords";
+import { removePasswordByValue } from "../services/remove-password-by-value";
 
 
 export function History() {
-  const [passwordsDayLists, setPasswordsDayLists] = useState<DayList[]>([])
+  const [passwords, setPasswords] = useState<Password[]>([])
   const [clipboard, setClipboard] = useState('')
 
   const { goBack } = useNavigation()
 
-  async function fetchPasswords() {
-    const dayLists = await getAllPasswords()
+  async function getAllPasswords() {
+    const storedPasswords = await fetchPasswords()
 
-    const invertedDayLists = dayLists.reverse()
-
-    setPasswordsDayLists(invertedDayLists)
+    setPasswords(storedPasswords)
   }
 
   async function handleClearPasswords() {
     await removeAllPasswords()
-    setPasswordsDayLists([])
+    setPasswords([])
   }
   
   async function removePassword(value: string) {
@@ -44,7 +42,7 @@ export function History() {
   }
 
   useEffect(() => {
-    fetchPasswords()
+    getAllPasswords()
   }, [])
 
   function copyPassword(password: string) {
@@ -94,29 +92,19 @@ export function History() {
         bg="$background"
         flex={1}
       >
-        <SectionList
-          sections={passwordsDayLists}
-          keyExtractor={(item) => item}
-          renderItem={({ section, index }) => (
+        <FlatList
+          data={passwords}
+          keyExtractor={(item) => item.value}
+          renderItem={({ item }) => (
             <PasswordCard
-              content={section.data[index]}
+              content={item.value}
               clipboard={clipboard}
               copyPassword={copyPassword}
               removePassword={removePassword}
             />
           )}
-          renderSectionHeader={({ section }) => (
-            <Heading
-              color="$green800"
-              fontSize="$lg"
-              mt="$10"
-              mb="$4"
-            >
-              {section.title}
-            </Heading>
-          )}
           contentContainerStyle={
-            passwordsDayLists.length === 0 ? {
+            passwords.length === 0 ? {
               height: '100%',
               justifyContent: 'center',
               paddingBottom: 32,
@@ -143,7 +131,7 @@ export function History() {
       >
         <DsButton
           title="Limpar senhas"
-          isDisabled={passwordsDayLists.length < 1}
+          isDisabled={passwords.length < 1}
           sx={{
             ":disabled": {
               opacity: 0.6
