@@ -11,9 +11,9 @@ import { EmptyList } from "../components/EmptyList";
 import { PasswordCard } from "../components/PasswordCard";
 
 import { Password } from "../storage/storageConfig";
-import { fetchPasswords } from "../services/fetch-passwords";
-import { removeAllPasswords } from "../services/remove-all-passwords";
-import { removePasswordByValue } from "../services/remove-password-by-value";
+import { fetchPasswords } from "../services/password/fetch-passwords";
+import { removeAllPasswords } from "../services/password/remove-all-passwords";
+import { removePasswordByValue } from "../services/password/remove-password-by-value";
 
 
 export function History() {

@@ -1,4 +1,4 @@
-import { generateUUID } from "../utils/uuid-generator";
+import { generateUUID } from "../../utils/uuid-generator";
 
 export function generatePassword() {
     const password = generateUUID().slice(0, 8)

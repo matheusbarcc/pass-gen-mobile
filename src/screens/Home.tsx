@@ -10,7 +10,7 @@ import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 
 import { DsButton } from "../components/DsButton";
 
-import { generatePassword } from "../services/generate-password";
+import { generatePassword } from "../services/password/generate-password";
 
 export function Home() {
   const [password, setPassword] = useState('')
@@ -30,6 +30,10 @@ export function Home() {
 
   function handleHistory() {
     navigate('history')
+  }
+
+  function handleApi() {
+    navigate('testapi')
   }
 
   const isPassCopied = clipboard === password && clipboard !== ""
@@ -112,7 +116,8 @@ export function Home() {
       >
         <DsButton title="Gerar senha" onPress={handleNewPassword} />
         <DsButton 
-          title="Salvar" type="secondary">
+          title="Salvar" type="secondary"
+        >
           <FloppyDisk weight="bold" color="#103214" />
         </DsButton>
         <DsButton
@@ -128,6 +133,7 @@ export function Home() {
         >
           {!isPassCopied && <ClipboardText weight="bold" color="#103214" />}
         </DsButton>
+        <DsButton title="API" onPress={handleApi} />
       </VStack>
     </>
   )

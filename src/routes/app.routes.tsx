@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Home } from "../screens/Home"
 import { History } from "../screens/History"
+import TestApi from "../screens/TestApi"
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
