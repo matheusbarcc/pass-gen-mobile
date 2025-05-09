@@ -1,27 +1,26 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import * as SecureStorage from 'expo-secure-store'
 
-export async function storageSave(key: any, value: string | object) {
+export async function setItem(key: any, value: string) {
     try {
-        const jsonValue = JSON.stringify(value)
-        await AsyncStorage.setItem(key, jsonValue)
+        await SecureStorage.setItemAsync(key, value)
     } catch (error) {
         throw error
     }
 }
 
-export async function storageGetAll(key: string) {
+export async function getItem(key: string) {
     try {
-        const storage = await AsyncStorage.getItem(key)
+        const value = await SecureStorage.getItemAsync(key)
 
-        return storage !== null ? JSON.parse(storage) : []
+        return value
     } catch (error) {
         throw error
     }
 }
 
-export async function storageRemoveAll(key: string) {
+export async function removeItem(key: string) {
     try {
-        await AsyncStorage.removeItem(key)
+        await SecureStorage.deleteItemAsync(key)
     } catch (error) {
         throw error
     }

@@ -1,6 +1,6 @@
-import { storageRemoveByValue } from "../../storage/local-storage";
-import { PASSWORD_COLLETION } from "../../storage/storageConfig";
+// import { removeItem } from "../../storage/local-storage";
+// import { PASSWORD_COLLETION } from "../../storage/storageConfig";
 
-export async function removePasswordByValue(value: string) {
-    await storageRemoveByValue(PASSWORD_COLLETION, value)
-}
+// export async function removePasswordByValue(value: string) {
+//     await removeItem(PASSWORD_COLLETION, value)
+// }
