@@ -11,7 +11,6 @@ function signUp({
     email,
     password,
     confirmPassword,
-    birthDay
 }: authResource.SignUpRequest) {
     return authResource
             .signUp({
@@ -19,13 +18,8 @@ function signUp({
                 email,
                 password,
                 confirmPassword,
-                birthDay
             })
             .then((response) => response.data)
 }
 
-function signOut() {
-    return authResource.signOut().then((response) => response.data)
-}
-
-export { signIn, signUp, signOut }
+export { signIn, signUp }

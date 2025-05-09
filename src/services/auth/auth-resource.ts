@@ -5,7 +5,6 @@ type SignUpRequest = {
     email: string
     password: string
     confirmPassword: string
-    birthDay: string
 }
 
 function signIn(email: string, password: string) {
@@ -20,18 +19,13 @@ function signUp({
     email,
     password,
     confirmPassword,
-    birthDay
 }: SignUpRequest) {
     return api.post('/auth/signup', {
         name,
         email,
         password,
         confirmPassword,
-        birthDay
     })
 }
-function signOut() {
-    return api.get('/auth/signout')
-}
 
-export { SignUpRequest, signIn, signUp, signOut }
+export { SignUpRequest, signIn, signUp }
