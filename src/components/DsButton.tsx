@@ -4,7 +4,7 @@ import { Button as GluestackButton, Text } from "@gluestack-ui/themed";
 type Props = ComponentProps<typeof GluestackButton> & {
   title?: string
   children?: ReactNode
-  type?: 'primary' | 'secondary'
+  type?: 'primary' | 'secondary' | 'destructive'
 }
 
 export function DsButton({ title, children, type = 'primary', ...rest }: Props) {
@@ -17,7 +17,7 @@ export function DsButton({ title, children, type = 'primary', ...rest }: Props) 
       gap="$2"
       justifyContent="center"
       alignItems="center"
-      bg={type === 'primary' ? '$green700' : '$green300'}
+      bg={type === 'primary' ? '$green700' : type === 'secondary' ? '$green300' : '$red300'}
       borderRadius="$xl"
       {...rest}
     >

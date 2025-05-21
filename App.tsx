@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { config } from './config/gluestack-ui.config';
 import { Routes } from './src/routes';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Jersey20_400Regular })
@@ -17,7 +18,11 @@ export default function App() {
         backgroundColor='transparent'
         translucent
       />
-      {fontsLoaded ? <Routes /> : <View />}
+      {fontsLoaded ? (
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
+      ) : <View />}
     </GluestackUIProvider>
   );
 }

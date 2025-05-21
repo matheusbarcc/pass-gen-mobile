@@ -1,8 +1,3 @@
-type DayList = {
-  title: string
-  data: string[]
-}
+const AUTH_TOKEN_STORAGE = '@pass-gen:token'
 
-const PASSWORD_COLLETION = '@pass-gen:passwords'
-
-export { PASSWORD_COLLETION, DayList }
+export { AUTH_TOKEN_STORAGE }

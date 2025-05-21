@@ -6,9 +6,11 @@ import * as Clipboard from 'expo-clipboard';
 import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
+import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 
 import { DsButton } from "../components/DsButton";
-import { createPassword } from "../storage/create-password";
+
+import { generatePassword } from "../services/password/generate-password";
 
 export function Home() {
   const [password, setPassword] = useState('')
@@ -17,7 +19,7 @@ export function Home() {
   const { navigate } = useNavigation()
 
   async function handleNewPassword() {
-    const newPassword = await createPassword()
+    const newPassword = await generatePassword()
     setPassword(newPassword)
   }
 
@@ -28,6 +30,10 @@ export function Home() {
 
   function handleHistory() {
     navigate('history')
+  }
+
+  function handleApi() {
+    navigate('testapi')
   }
 
   const isPassCopied = clipboard === password && clipboard !== ""
@@ -109,6 +115,11 @@ export function Home() {
         borderTopRightRadius="$3xl"
       >
         <DsButton title="Gerar senha" onPress={handleNewPassword} />
+        <DsButton 
+          title="Salvar" type="secondary"
+        >
+          <FloppyDisk weight="bold" color="#103214" />
+        </DsButton>
         <DsButton
           title={isPassCopied ? "Copiada!" : "Copiar"}
           type="secondary"
@@ -122,6 +133,7 @@ export function Home() {
         >
           {!isPassCopied && <ClipboardText weight="bold" color="#103214" />}
         </DsButton>
+        <DsButton title="API" onPress={handleApi} />
       </VStack>
     </>
   )
