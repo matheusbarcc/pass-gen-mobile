@@ -1,22 +1,25 @@
 import { useState } from "react";
-import { HStack, Text, VStack } from "@gluestack-ui/themed";
+import { Center, HStack, Text, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from 'expo-clipboard';
 
-import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
+import Check from "phosphor-react-native/src/icons/Check";
+import Copy from "phosphor-react-native/src/icons/Copy";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
 import Lock from "phosphor-react-native/src/icons/Lock";
 import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 
-import { DsButton } from "../components/DsButton";
+import { Button } from "../components/Button"
 
-import { generatePassword } from "../services/password/generate-password";
+import { generatePassword } from "../utils/generatePassword";
 
 export function Home() {
   const [password, setPassword] = useState('')
   const [clipboard, setClipboard] = useState('')
 
   const { navigate } = useNavigation()
+
+  const isPassCopied = clipboard === password && clipboard !== ""
 
   async function handleNewPassword() {
     const newPassword = await generatePassword()
@@ -32,12 +35,6 @@ export function Home() {
     navigate('history')
   }
 
-  function handleApi() {
-    navigate('testapi')
-  }
-
-  const isPassCopied = clipboard === password && clipboard !== ""
-
   return (
     <>
       <VStack
@@ -47,11 +44,11 @@ export function Home() {
         flex={1}
       >
         <HStack alignItems="center" justifyContent="space-between">
-          <Text fontSize="$4xl" fontFamily="$heading" color="$green700">
+          <Text fontSize="$5xl" fontFamily="$heading" color="$green700">
             PassGen
           </Text>
 
-          <DsButton
+          <Button
             h="$12"
             w="$12"
             borderRadius="$lg"
@@ -61,7 +58,7 @@ export function Home() {
             onPress={handleHistory}
           >
             <ClockCounterClockwise color="#FFF" />
-          </DsButton>
+          </Button>
         </HStack>
 
         <VStack
@@ -71,9 +68,8 @@ export function Home() {
         >
           <HStack
             w="$full"
-            h="$20"
-            p="$4"
-            justifyContent="center"
+            p="$5"
+            justifyContent="space-between"
             alignItems="center"
             bg="$base100"
             borderWidth={1}
@@ -82,21 +78,38 @@ export function Home() {
             position="relative"
           >
             <Lock
-              color='#E4E4E4'
-              style={{
-                position: 'absolute',
-                left: 24,
-              }}
+              color='#CFCFCF'
             />
-            <Text fontFamily="$body" color="$black" fontSize="$2xl">
-              {password ? password : <Text color='$base500'>Senha</Text>}
-            </Text>
+            <Center>
+              <Text fontFamily="$body" color="$black" fontSize="$xl">
+                {password ? password : <Text color='$base600' fontSize="$md">Senha</Text>}
+              </Text>
+            </Center>
+            <Button
+              w="$12"
+              h="$12"
+              borderRadius="$md"
+              type="secondary"
+              isDisabled={isPassCopied}
+              sx={{
+                ":disabled": {
+                  opacity: 0.6
+                }
+              }}
+              onPress={handleCopyPassword}
+            >
+              {isPassCopied ? (
+                <Check weight="bold" color="#103214" />
+              ) : (
+                <Copy weight="bold" color="#103214" />
+              )}
+            </Button>
           </HStack>
           <Text
             w="$64"
             mt="$2"
             textAlign="center"
-            fontSize="$xs"
+            fontSize="$sm"
             color="$base700"
           >
             As senhas geradas são únicas, você pode vê-las no histórico.
@@ -114,26 +127,10 @@ export function Home() {
         borderTopLeftRadius="$3xl"
         borderTopRightRadius="$3xl"
       >
-        <DsButton title="Gerar senha" onPress={handleNewPassword} />
-        <DsButton 
-          title="Salvar" type="secondary"
-        >
+        <Button title="Gerar senha" onPress={handleNewPassword} />
+        <Button title="Salvar" type="secondary">
           <FloppyDisk weight="bold" color="#103214" />
-        </DsButton>
-        <DsButton
-          title={isPassCopied ? "Copiada!" : "Copiar"}
-          type="secondary"
-          isDisabled={isPassCopied || password === ""}
-          sx={{
-            ":disabled": {
-              opacity: 0.6
-            }
-          }}
-          onPress={handleCopyPassword}
-        >
-          {!isPassCopied && <ClipboardText weight="bold" color="#103214" />}
-        </DsButton>
-        <DsButton title="API" onPress={handleApi} />
+        </Button>
       </VStack>
     </>
   )

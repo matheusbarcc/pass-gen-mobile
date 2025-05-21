@@ -5,7 +5,7 @@ import Check from "phosphor-react-native/src/icons/Check";
 import Trash from "phosphor-react-native/src/icons/Trash";
 import ClipboardText from "phosphor-react-native/src/icons/ClipboardText";
 
-import { DsButton } from "./DsButton";
+import { Button } from "../components/Button"
 
 type Props = {
   content: string
@@ -39,11 +39,11 @@ export function PasswordCard({ content, clipboard, copyPassword, removePassword 
       alignItems="center"
       p='$2'
     >
-      <Text ml="$4" fontSize="$lg" flex={1}> 
+      <Text ml="$4" fontSize="$lg" flex={1}>
         {content}
       </Text>
 
-      <DsButton
+      <Button
         w="$12"
         h="$12"
         mr="$2"
@@ -52,8 +52,8 @@ export function PasswordCard({ content, clipboard, copyPassword, removePassword 
         onPress={handleRemovePassword}
       >
         <Trash weight="bold" color="#ab0202" />
-      </DsButton>
-      <DsButton
+      </Button>
+      <Button
         w="$12"
         h="$12"
         borderRadius="$md"
@@ -71,7 +71,7 @@ export function PasswordCard({ content, clipboard, copyPassword, removePassword 
         ) : (
           <ClipboardText weight="bold" color="#103214" />
         )}
-      </DsButton>
+      </Button>
     </HStack>
   )
 }

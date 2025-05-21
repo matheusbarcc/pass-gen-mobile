@@ -1,9 +1,9 @@
-import { Input, VStack } from "@gluestack-ui/themed";
+import { Center, Text } from "@gluestack-ui/themed";
 
 export function SignIn() {
-    return (
-        <VStack bg="$background" flex={1}>
-            <Input />
-        </VStack>
-    )
+  return (
+    <Center bg="$background" flex={1}>
+      <Text size="6xl">Teste</Text>
+    </Center>
+  )
 }

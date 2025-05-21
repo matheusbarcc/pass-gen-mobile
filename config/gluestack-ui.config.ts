@@ -387,6 +387,7 @@ export const gluestackUIConfig = createConfig({
       base100: '#F9FBF7',
       base300: '#ECEEEA',
       base500: '#E4E4E4',
+      base600: '#CFCFCF',
       base700: '#ADADAD',
       backgroundDark0: '#FCFCFC',
       backgroundDark50: '#F5F5F5',
@@ -446,6 +447,7 @@ export const gluestackUIConfig = createConfig({
       '10': 40,
       '11': 44,
       '12': 48,
+      '14': 56,
       '16': 64,
       '20': 80,
       '24': 96,
@@ -543,7 +545,8 @@ export const gluestackUIConfig = createConfig({
     },
     fonts: {
       heading: 'Jersey20_400Regular',
-      body: 'Jersey20_400Regular',
+      body: 'Poppins_400Regular',
+      bold: 'Poppins_700Bold'
     },
     fontSizes: {
       '2xs': 10,

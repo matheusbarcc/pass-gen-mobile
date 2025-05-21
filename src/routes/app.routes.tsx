@@ -10,14 +10,14 @@ const { Navigator, Screen } = createNativeStackNavigator()
 export function AppRoutes() {
   const { authState, isLoadingStoredToken } = useAuth()
 
-  if(isLoadingStoredToken) {
+  if (isLoadingStoredToken) {
     return <Loading />
   }
 
   return (
     <Navigator screenOptions={{ headerShown: false }}>
 
-      {!authState?.authenticated ? (
+      {authState?.authenticated ? (
         <>
           <Screen
             name="signin"

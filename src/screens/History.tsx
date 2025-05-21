@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
 import Trash from "phosphor-react-native/src/icons/Trash";
 
-import { DsButton } from "../components/DsButton";
+import { Button } from "../components/Button"
 import { EmptyList } from "../components/EmptyList";
 import { PasswordCard } from "../components/PasswordCard";
 
@@ -27,7 +27,7 @@ export function History() {
     // await removeAllPasswords()
     setPasswords([])
   }
-  
+
   async function removePassword(value: string) {
     // await removePasswordByValue(value)
   }
@@ -124,7 +124,7 @@ export function History() {
         borderTopLeftRadius="$3xl"
         borderTopRightRadius="$3xl"
       >
-        <DsButton
+        <Button
           title="Limpar senhas"
           isDisabled={passwords.length < 1}
           sx={{
@@ -135,7 +135,7 @@ export function History() {
           onPress={handleClearPasswords}
         >
           <Trash weight="bold" color="#FFF" />
-        </DsButton>
+        </Button>
       </VStack>
     </>
   )
