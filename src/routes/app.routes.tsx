@@ -17,7 +17,7 @@ export function AppRoutes() {
   return (
     <Navigator screenOptions={{ headerShown: false }}>
 
-      {authState?.authenticated ? (
+      {!authState?.authenticated ? (
         <>
           <Screen
             name="signin"
