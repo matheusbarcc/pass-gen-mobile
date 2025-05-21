@@ -3,11 +3,12 @@ import { createContext, useEffect, useState } from "react"
 import {
     signIn,
     signUp
-} from '../services/auth/auth-service'
+} from '../services/auth/authService'
 
-import * as localStorage from '../storage/local-storage'
+import * as localStorage from '../storage/localStorage'
 
 import { api } from "../lib/axios"
+import { AUTH_TOKEN_STORAGE } from "../storage/storageConfig"
 
 interface AuthContextProps {
     authState?: {
@@ -33,8 +34,6 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
-const TOKEN_KEY = "access-token"
-
 export const AuthContext = createContext<AuthContextProps>({})
 
 
@@ -46,7 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     useEffect(() => {
         async function loadToken() {
-            const token = await localStorage.getItem(TOKEN_KEY)
+            const token = await localStorage.getItem(AUTH_TOKEN_STORAGE)
 
             if(token) {
                 api.defaults.headers.common["Authorization"] = `${token}`
@@ -90,7 +89,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             api.defaults.headers.common["Authorization"] = `${result.token}`
             
-            await localStorage.setItem(TOKEN_KEY, result.token)
+            await localStorage.setItem(AUTH_TOKEN_STORAGE, result.token)
         } catch (error) {
             throw error
         }
@@ -98,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     async function logout() {
         try {
-            await localStorage.removeItem(TOKEN_KEY)
+            await localStorage.removeItem(AUTH_TOKEN_STORAGE)
 
             api.defaults.headers.common["Authorization"] = ""
 

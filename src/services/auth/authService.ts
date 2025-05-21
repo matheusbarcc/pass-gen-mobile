@@ -1,4 +1,4 @@
-import * as authResource from './auth-resource'
+import * as authResource from './authResource'
 
 function signIn(email: string, password: string) {
     return authResource

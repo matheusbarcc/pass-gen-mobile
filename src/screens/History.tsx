@@ -10,31 +10,26 @@ import { DsButton } from "../components/DsButton";
 import { EmptyList } from "../components/EmptyList";
 import { PasswordCard } from "../components/PasswordCard";
 
-import { Password } from "../storage/storageConfig";
-import { fetchPasswords } from "../services/password/fetch-passwords";
-import { removeAllPasswords } from "../services/password/remove-all-passwords";
-import { removePasswordByValue } from "../services/password/remove-password-by-value";
-
 
 export function History() {
-  const [passwords, setPasswords] = useState<Password[]>([])
+  const [passwords, setPasswords] = useState<any[]>([])
   const [clipboard, setClipboard] = useState('')
 
   const { goBack } = useNavigation()
 
   async function getAllPasswords() {
-    const storedPasswords = await fetchPasswords()
+    // const storedPasswords = await fetchPasswords()
 
-    setPasswords(storedPasswords)
+    // setPasswords(storedPasswords)
   }
 
   async function handleClearPasswords() {
-    await removeAllPasswords()
+    // await removeAllPasswords()
     setPasswords([])
   }
   
   async function removePassword(value: string) {
-    await removePasswordByValue(value)
+    // await removePasswordByValue(value)
   }
 
   function handleGoBack() {

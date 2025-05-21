@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { useAuth } from "../hooks/use-auth"
+import { useAuth } from "../hooks/useAuth"
 import { History } from "../screens/History"
 import { Home } from "../screens/Home"
 
