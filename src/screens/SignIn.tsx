@@ -1,8 +1,15 @@
 import { Center, ScrollView, Text, VStack } from "@gluestack-ui/themed";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+import { useNavigation } from "@react-navigation/native";
 
 export function SignIn() {
+  const { navigate } = useNavigation()
+
+  function handleNewAccount() {
+    navigate("signup")
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -28,7 +35,7 @@ export function SignIn() {
             Ainda não tem acesso?
           </Text>
 
-          <Button title="Criar conta" type="secondary" />
+          <Button title="Criar conta" type="secondary" onPress={handleNewAccount} />
         </Center>
 
       </VStack>

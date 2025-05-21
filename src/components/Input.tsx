@@ -17,7 +17,7 @@ export function Input({ isReadOnly, errorMessage = null, isInvalid = false, ...r
         h="$14"
         borderWidth="$1"
         borderColor='$base500'
-        borderRadius="$md"
+        borderRadius="$lg"
         $focus={{
           borderWidth: 1,
           borderColor: invalid ? "$red500" : "$green700"

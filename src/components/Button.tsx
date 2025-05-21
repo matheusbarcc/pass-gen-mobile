@@ -16,7 +16,7 @@ export function Button({ title, children, type = 'primary', isLoading, ...rest }
       flexDirection="row"
       gap="$2"
       bg={type === 'primary' ? '$green700' : type === 'secondary' ? '$green300' : '$red300'}
-      borderRadius="$md"
+      borderRadius="$lg"
       {...rest}
     >
       {isLoading ? (
