@@ -1,28 +1,18 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { api } from "../lib/axios";
+import { SignUpRequest } from "../services/auth/authResource";
 
-import {
-    signIn,
-    signUp
-} from '../services/auth/authService'
+import * as authService from '../services/auth/authService';
 
-import * as localStorage from '../storage/localStorage'
-
-import { api } from "../lib/axios"
-import { AUTH_TOKEN_STORAGE } from "../storage/storageConfig"
-
-interface AuthContextProps {
-    authState?: {
-        token: string | null
-        authenticated: boolean | null
-    }
-    onRegister?: (
-        name: string,
-        email: string,
-        password: string,
-        confirmPassword: string
-    ) => Promise<any>
-    onLogin?: (email: string, password: string) => Promise<any>
-    onLogout?: () => Promise<any>
+export type AuthContextDataProps = {
+  signIn: (email: string, password: string) => Promise<any>
+  signUp: (user: SignUpRequest) => Promise<void>
+  signOut: () => Promise<void>
+  isLoadingStoredToken: boolean
+  authState?: {
+    token: string | null
+    authenticated: boolean | null
+  }
 }
 
 interface AuthenticatedProps {
@@ -30,93 +20,97 @@ interface AuthenticatedProps {
     authenticated: boolean | null
 }
 
-interface AuthProviderProps {
-    children: React.ReactNode
+export type AuthContextProviderProps = {
+  children: ReactNode
 }
 
-export const AuthContext = createContext<AuthContextProps>({})
+export const AuthContext = createContext<AuthContextDataProps>({} as AuthContextDataProps);
 
+export function AuthContextProvider({ children }: AuthContextProviderProps) {
+  const [isLoadingStoredToken, setIsLoadingStoredToken] = useState(false)
+  const [authState, setAuthState] = useState<AuthenticatedProps>({
+          token: null,
+          authenticated: null
+  })
 
-export function AuthProvider({ children }: AuthProviderProps) {
-    const [authState, setAuthState] = useState<AuthenticatedProps>({
+  async function updateToken(token: string) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+
+  async function signIn(email: string, password: string) {
+    try {
+      const data = await authService.signIn(email, password)
+
+      if (data) {
+        updateToken(data.token)
+        setAuthState({
+            authenticated: true,
+            token: data.token
+        })
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function signUp({ name, email, birthday, password }: SignUpRequest) {
+    try {
+        await authService.signUp({ name, email, birthday, password })
+    } catch (error) {
+        throw error
+    }
+  }
+
+  async function signOut() {
+    try {
+      setIsLoadingStoredToken(true)
+
+      await authService.signOut()
+
+      setAuthState({
         token: null,
         authenticated: null
-    })
-
-    useEffect(() => {
-        async function loadToken() {
-            const token = await localStorage.getItem(AUTH_TOKEN_STORAGE)
-
-            if(token) {
-                api.defaults.headers.common["Authorization"] = `${token}`
-            }
-
-            setAuthState({
-                token,
-                authenticated: true
-            })
-        }
-
-        loadToken()
-    }, [])
-
-    async function register(
-        name: string,
-        email: string,
-        password: string,
-        confirmPassword: string
-    ) {
-        try {
-            await signUp({
-                name,
-                email,
-                password,
-                confirmPassword
-            })
-        } catch (error) {
-            throw error
-        }
+      })
+    } catch (error) {
+      throw error
+    } finally {
+        setIsLoadingStoredToken(false)
     }
+  }
 
-    async function login(email: string, password: string) {
-        try {
-            const result = await signIn( email, password )
+  async function loadToken() {
+    try {
+      setIsLoadingStoredToken(true)
 
-            setAuthState({
-                authenticated: true,
-                token: result.token
-            })
+      const token = await authService.getAuthToken()
 
-            api.defaults.headers.common["Authorization"] = `${result.token}`
-            
-            await localStorage.setItem(AUTH_TOKEN_STORAGE, result.token)
-        } catch (error) {
-            throw error
-        }
+      if (token) {
+        await updateToken(token)
+        setAuthState({
+            token,
+            authenticated: true
+        })
+      }
+    } catch (error) {
+      throw error
+    } finally {
+        setIsLoadingStoredToken(false)
     }
+  }
 
-    async function logout() {
-        try {
-            await localStorage.removeItem(AUTH_TOKEN_STORAGE)
+  useEffect(() => {
+    loadToken()
+  }, [])
 
-            api.defaults.headers.common["Authorization"] = ""
-
-            setAuthState({
-                token: null,
-                authenticated: null
-            })
-
-        } catch (error) {
-            throw error
-        }
-    }
-
-    const value = {
-        onRegister: register,
-        onLogin: login,
-        onLogout: logout,
-        authState
-    }
-
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{
+      signIn,
+      signUp,
+      signOut,
+      isLoadingStoredToken,
+      authState
+    }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }

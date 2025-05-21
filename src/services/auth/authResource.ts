@@ -1,4 +1,6 @@
 import { api } from "../../lib/axios"
+import { getItem, removeItem, setItem } from "../../storage/localStorage"
+import { AUTH_TOKEN_STORAGE } from "../../storage/storageConfig"
 
 type SignUpRequest = {
     name: string
@@ -8,10 +10,14 @@ type SignUpRequest = {
 }
 
 async function signIn(email: string, password: string) {
-    return await api.post('/signin', {
+    const { data } = await api.post('/signin', {
         email,
         password
     })
+
+    await setItem(AUTH_TOKEN_STORAGE, data.token)
+
+    return data
 }
 
 async function signUp({
@@ -28,4 +34,14 @@ async function signUp({
     })
 }
 
-export { SignUpRequest, signIn, signUp }
+async function signOut() {
+    await removeItem(AUTH_TOKEN_STORAGE)
+}
+
+async function getAuthToken() {
+    const token = getItem(AUTH_TOKEN_STORAGE)
+
+    return token
+}
+
+export { SignUpRequest, signIn, signUp, signOut, getAuthToken }

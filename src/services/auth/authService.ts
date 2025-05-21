@@ -1,9 +1,9 @@
 import * as authResource from './authResource'
 
 async function signIn(email: string, password: string) {
-    const response = await authResource.signIn(email, password)
-
-    return response.data
+    const data = await authResource.signIn(email, password)
+    
+    return data
 }
 
 async function signUp({
@@ -15,4 +15,14 @@ async function signUp({
     await authResource.signUp({ name, email, birthday, password })
 }
 
-export { signIn, signUp }
+async function signOut() {
+    await authResource.signOut()
+}
+
+async function getAuthToken() {
+    const token = authResource.getAuthToken()
+
+    return token
+}
+
+export { signIn, signUp, signOut, getAuthToken }
