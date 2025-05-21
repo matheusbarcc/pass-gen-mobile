@@ -3,28 +3,28 @@ import { api } from "../../lib/axios"
 type SignUpRequest = {
     name: string
     email: string
+    birthday: Date
     password: string
-    confirmPassword: string
 }
 
-function signIn(email: string, password: string) {
-    return api.post('/auth/signin', {
+async function signIn(email: string, password: string) {
+    return await api.post('/signin', {
         email,
         password
     })
 }
 
-function signUp({
+async function signUp({
     name,
     email,
+    birthday,
     password,
-    confirmPassword,
 }: SignUpRequest) {
-    return api.post('/auth/signup', {
+    return await api.post('/signup', {
         name,
         email,
+        birthday,
         password,
-        confirmPassword,
     })
 }
 
