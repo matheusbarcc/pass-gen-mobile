@@ -31,16 +31,24 @@ async function signUp({
   birthday,
   password,
 }: SignUpRequest) {
-  return await api.post('/signup', {
-    name,
-    email,
-    birthday,
-    password,
-  })
+  try {
+    await api.post('/signup', {
+      name,
+      email,
+      birthday,
+      password,
+    })
+  } catch (error) {
+    throw error
+  }
 }
 
 async function signOut() {
-  await removeItem(AUTH_TOKEN_STORAGE)
+  try {
+    await removeItem(AUTH_TOKEN_STORAGE)
+  } catch (error) {
+    throw error
+  }
 }
 
 async function getAuthToken() {

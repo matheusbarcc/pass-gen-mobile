@@ -6,8 +6,12 @@ type CreateItemRequest = {
 }
 
 async function createItem({ label, password }: CreateItemRequest) {
-  await api.post('/items', {
-    label,
-    password
-  })
+  try {
+    await api.post('/items', {
+      label,
+      password
+    })
+  } catch (error) {
+    throw error
+  }
 }
