@@ -1,19 +1,55 @@
-import { Center, ScrollView, Text, VStack } from "@gluestack-ui/themed";
-import { Input } from "../components/Input";
-import { Button } from "../components/Button";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native"
+import { Center, ScrollView, Text, useToast, VStack } from "@gluestack-ui/themed"
+
+import { Input } from "../components/Input"
+import { Button } from "../components/Button"
+import { ToastMessage } from "../components/ToastMessage"
+
+import { useAuth } from "../hooks/useAuth"
+import { AppError } from "../utils/AppError"
+
+import * as yup from 'yup'
+import { InferType } from 'yup'
 import { Controller, useForm } from "react-hook-form";
-import { useAuth } from "../hooks/useAuth";
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const signInSchema = yup.object({
+  email: yup.string().required('Preencha o e-mail.').email('O e-mail deve ser válido.'),
+  password: yup.string().required('Preencha a senha.').min(3, 'A senha possui no mínimo 3 dígitos.')
+})
+
+type signInData = InferType<typeof signInSchema>
 
 export function SignIn() {
   const { signIn } = useAuth()
 
+  const toast = useToast()
+
   const { navigate } = useNavigation()
 
-  const { control, handleSubmit } = useForm()
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(signInSchema)
+  })
 
-  async function handleSignIn(data: any) {
-    await signIn(data.email, data.password)
+  async function handleSignIn(data: signInData) {
+    try {
+      await signIn(data.email, data.password)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError ? error.message : 'Não foi possível fazer login. Tente novamente mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+          />
+        )
+      })
+    }
   }
 
   function handleNewAccount() {
@@ -42,6 +78,7 @@ export function SignIn() {
                 placeholder="E-mail"
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.email?.message}
               />
             )}
           />
@@ -54,6 +91,7 @@ export function SignIn() {
                 placeholder="Senha"
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.password?.message}
                 secureTextEntry
               />
             )}

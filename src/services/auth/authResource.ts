@@ -10,18 +10,19 @@ type SignUpRequest = {
 }
 
 async function signIn(email: string, password: string) {
-  const { data } = await api.post('/signin', {
-    email,
-    password
-  })
-
   try {
+    const { data } = await api.post('/signin', {
+      email,
+      password
+    })
+
     await setItem(AUTH_TOKEN_STORAGE, data.token)
+
+    return data
   } catch (error) {
     throw error
   }
 
-  return data
 }
 
 async function signUp({

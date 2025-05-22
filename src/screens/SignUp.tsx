@@ -4,14 +4,15 @@ import { Center, ScrollView, Text, useToast, VStack } from "@gluestack-ui/themed
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { DatePicker } from "../components/DatePicker";
+import { ToastMessage } from "../components/ToastMessage";
+
+import { useAuth } from "../hooks/useAuth";
+import { AppError } from "../utils/AppError";
 
 import * as yup from 'yup'
 import { InferType } from 'yup'
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from "../hooks/useAuth";
-import { AppError } from "../utils/AppError";
-import { ToastMessage } from "../components/ToastMessage";
 
 const signUpSchema = yup.object({
   name: yup.string().required('O nome é obrigatório.'),
