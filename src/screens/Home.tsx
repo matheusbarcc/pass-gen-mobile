@@ -17,8 +17,10 @@ import { useAuth } from "../hooks/useAuth";
 import { AppError } from "../utils/AppError";
 import { ToastMessage } from "../components/ToastMessage";
 import { SaveItemForm } from "../components/SaveItemForm";
+import { PasswordLengthSelector } from "../components/PasswordLengthSelector";
 
 export function Home() {
+  const [passwordLength, setPasswordLength] = useState<number>(8)
   const [password, setPassword] = useState('')
   const [clipboard, setClipboard] = useState('')
 
@@ -31,7 +33,7 @@ export function Home() {
   const isPassCopied = clipboard === password && clipboard !== ""
 
   async function handleNewPassword() {
-    const newPassword = await generatePassword()
+    const newPassword = await generatePassword(passwordLength)
     setPassword(newPassword)
   }
 
@@ -73,6 +75,10 @@ export function Home() {
         )
       })
     }
+  }
+
+  function handleSwitchPasswordLength(length: number) {
+    setPasswordLength(length)
   }
 
   function handleHistory() {
@@ -145,15 +151,23 @@ export function Home() {
               )}
             </Button>
           </HStack>
-          <Text
-            w="$64"
-            mt="$2"
-            textAlign="center"
-            fontSize="$sm"
-            color="$base700"
-          >
-            As senhas geradas são únicas, você pode vê-las no histórico.
-          </Text>
+          <HStack mt="$3" gap="$3">
+            <PasswordLengthSelector
+              title="6 dígitos"
+              isActive={passwordLength === 6}
+              onPress={() => handleSwitchPasswordLength(6)}
+            />
+            <PasswordLengthSelector
+              title="8 dígitos"
+              isActive={passwordLength === 8}
+              onPress={() => handleSwitchPasswordLength(8)}
+            />
+            <PasswordLengthSelector
+              title="10 dígitos"
+              isActive={passwordLength === 10}
+              onPress={() => handleSwitchPasswordLength(10)}
+            />
+          </HStack>
         </VStack>
       </VStack>
       <VStack
