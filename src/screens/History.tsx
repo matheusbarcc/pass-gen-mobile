@@ -11,6 +11,7 @@ import { ItemCard } from "../components/ItemCard";
 import { deleteItemService, fetchUserItems, ItemDTO } from "../services/item/itemService";
 import { AppError } from "../utils/AppError";
 import { ToastMessage } from "../components/ToastMessage";
+import { Loading } from "../components/Loading";
 
 export type PasswordClipboard = {
   id: string
@@ -18,6 +19,7 @@ export type PasswordClipboard = {
 }
 
 export function History() {
+  const [isLoading, setIsLoading] = useState(false)
   const [items, setItems] = useState<ItemDTO[]>([])
   const [clipboard, setClipboard] = useState<PasswordClipboard>({} as PasswordClipboard)
 
@@ -27,6 +29,7 @@ export function History() {
 
   async function fetchPasswords() {
     try {
+      setIsLoading(true)
       const items = await fetchUserItems()
 
       setItems(items)
@@ -46,6 +49,8 @@ export function History() {
           />
         )
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -136,36 +141,38 @@ export function History() {
           </Heading>
         </HStack>
       </HStack>
-      <VStack
-        px="$6"
-        bg="$background"
-        flex={1}
-      >
-        <FlatList
-          data={items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ItemCard
-              item={item}
-              clipboard={clipboard}
-              copyPassword={copyPassword}
-              removePassword={removePassword}
-            />
-          )}
-          contentContainerStyle={
-            items.length === 0 ? {
-              height: '100%',
-            } : {
-              paddingTop: 40,
-              paddingBottom: 32,
+      {isLoading ? <Loading /> : (
+        <VStack
+          px="$6"
+          bg="$background"
+          flex={1}
+        >
+          <FlatList
+            data={items}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <ItemCard
+                item={item}
+                clipboard={clipboard}
+                copyPassword={copyPassword}
+                removePassword={removePassword}
+              />
+            )}
+            contentContainerStyle={
+              items.length === 0 ? {
+                height: '100%',
+              } : {
+                paddingTop: 40,
+                paddingBottom: 32,
+              }
             }
-          }
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <EmptyList />
-          }
-        />
-      </VStack>
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <EmptyList />
+            }
+          />
+        </VStack>
+      )}
     </>
   )
 }

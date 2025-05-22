@@ -17,6 +17,8 @@ export function Button({ title, children, type = 'primary', isLoading, ...rest }
       gap="$2"
       bg={type === 'primary' ? '$green700' : type === 'secondary' ? '$green300' : '$red300'}
       borderRadius="$lg"
+      isDisabled={isLoading}
+      $disabled-opacity={0.7}
       {...rest}
     >
       {isLoading ? (

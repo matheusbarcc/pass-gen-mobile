@@ -27,7 +27,7 @@ export function SignIn() {
 
   const { navigate } = useNavigation()
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(signInSchema)
   })
 
@@ -99,7 +99,11 @@ export function SignIn() {
 
         </VStack>
 
-        <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+        <Button
+          title="Acessar"
+          onPress={handleSubmit(handleSignIn)}
+          isLoading={isSubmitting}
+        />
 
         <Center flex={1} justifyContent="flex-end" gap="$1" mt='$4'>
           <Text fontFamily="$bold" color="$green800" size="sm">

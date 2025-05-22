@@ -15,6 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AppError } from '../utils/AppError'
 import { ToastMessage } from './ToastMessage'
 import { createItem } from '../services/item/itemResource'
+import { useNavigation } from '@react-navigation/native'
 
 type Props = {
   generatedPassword: string
@@ -40,11 +41,11 @@ export function SaveItemForm({ generatedPassword, isDisabled = false }: Props) {
 
   const toast = useToast()
 
+  const { navigate } = useNavigation()
+
   async function handleSaveItem(data: SaveItemData) {
     try {
       await createItem(data.label, data.password)
-
-      closeDrawer()
 
       toast.show({
         placement: 'top',
@@ -56,6 +57,9 @@ export function SaveItemForm({ generatedPassword, isDisabled = false }: Props) {
           />
         )
       })
+
+      navigate('history')
+
     } catch (error) {
       const isAppError = error instanceof AppError
 
@@ -131,6 +135,8 @@ export function SaveItemForm({ generatedPassword, isDisabled = false }: Props) {
               )}
             />
 
+            <Text fontFamily='$bold'>Senha</Text>
+
             <Controller
               key={generatedPassword}
               name="password"
@@ -143,6 +149,7 @@ export function SaveItemForm({ generatedPassword, isDisabled = false }: Props) {
                   defaultValue={generatedPassword}
                   value={value}
                   errorMessage={errors.password?.message}
+                  isReadOnly
                 />
               )}
             />

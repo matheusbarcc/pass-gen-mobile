@@ -17,10 +17,11 @@ type Props = {
   item: ItemDTO
   clipboard: PasswordClipboard
   copyPassword: (id: string, value: string) => void
-  removePassword: (itemId: string) => void
+  removePassword: (itemId: string) => Promise<void>
 }
 
 export function ItemCard({ item, clipboard, copyPassword, removePassword }: Props) {
+  const [isLoading, setIsLoading] = useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   function toggleIsVisible() {
@@ -35,7 +36,9 @@ export function ItemCard({ item, clipboard, copyPassword, removePassword }: Prop
   }
 
   async function handleRemovePassword() {
-    removePassword(item.id)
+    setIsLoading(true)
+    await removePassword(item.id)
+    setIsLoading(false)
   }
 
   const isPassCopied = clipboard.value === item.password && clipboard.id === item.id
@@ -99,6 +102,7 @@ export function ItemCard({ item, clipboard, copyPassword, removePassword }: Prop
           borderRadius="$md"
           type="destructive"
           onPress={handleRemovePassword}
+          isLoading={isLoading}
         >
           <Trash weight="bold" color="#ab0202" />
         </Button>

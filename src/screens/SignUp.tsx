@@ -166,7 +166,11 @@ export function SignUp() {
           />
         </VStack>
 
-        <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} />
+        <Button
+          title="Criar e acessar"
+          onPress={handleSubmit(handleSignUp)}
+          isLoading={isSubmitting}
+        />
 
         <Center flex={1} justifyContent="flex-end" gap="$1" mt='$4'>
           <Button title="Voltar para o login" type="secondary" onPress={handleSignIn} />
