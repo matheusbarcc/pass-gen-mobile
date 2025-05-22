@@ -23,7 +23,7 @@ export function Drawer({
   onClose,
   children,
   height = screenHeight * 0.45,
-  overlayColor = 'rgba(0, 0, 0, 0.5)',
+  overlayColor = 'rgba(0, 0, 0, 0.3)',
   animationDuration = 250,
 }: Props) {
   const translateY = useRef(new Animated.Value(height)).current;

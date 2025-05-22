@@ -11,4 +11,14 @@ async function createItem(label: string, password: string) {
   }
 }
 
-export { createItem }
+async function fetchUserItems() {
+  try {
+    const { data } = await api.get('/items')
+
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export { createItem, fetchUserItems }

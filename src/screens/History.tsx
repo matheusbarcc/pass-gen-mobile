@@ -1,31 +1,30 @@
+import { FlatList } from "react-native";
 import { useEffect, useState } from "react";
-import { FlatList, SectionList } from "react-native";
-import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
-import Trash from "phosphor-react-native/src/icons/Trash";
 
-import { Button } from "../components/Button"
 import { EmptyList } from "../components/EmptyList";
-import { PasswordCard } from "../components/PasswordCard";
+import { ItemCard } from "../components/ItemCard";
 
+import { fetchUserItems, ItemDTO } from "../services/item/itemService";
+
+export type PasswordClipboard = {
+  id: string
+  value: string
+}
 
 export function History() {
-  const [passwords, setPasswords] = useState<any[]>([])
-  const [clipboard, setClipboard] = useState('')
+  const [items, setItems] = useState<ItemDTO[]>([])
+  const [clipboard, setClipboard] = useState<PasswordClipboard>({} as PasswordClipboard)
 
   const { goBack } = useNavigation()
 
-  async function getAllPasswords() {
-    // const storedPasswords = await fetchPasswords()
+  async function fetchPasswords() {
+    const items = await fetchUserItems()
 
-    // setPasswords(storedPasswords)
-  }
-
-  async function handleClearPasswords() {
-    // await removeAllPasswords()
-    setPasswords([])
+    setItems(items)
   }
 
   async function removePassword(value: string) {
@@ -37,11 +36,11 @@ export function History() {
   }
 
   useEffect(() => {
-    getAllPasswords()
+    fetchPasswords()
   }, [])
 
-  function copyPassword(password: string) {
-    setClipboard(password)
+  function copyPassword(id: string, value: string) {
+    setClipboard({ id, value })
   }
 
   return (
@@ -88,22 +87,21 @@ export function History() {
         flex={1}
       >
         <FlatList
-          data={passwords}
-          keyExtractor={(item) => item.value}
+          data={items}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <PasswordCard
-              content={item.value}
+            <ItemCard
+              item={item}
               clipboard={clipboard}
               copyPassword={copyPassword}
               removePassword={removePassword}
             />
           )}
           contentContainerStyle={
-            passwords.length === 0 ? {
+            items.length === 0 ? {
               height: '100%',
-              justifyContent: 'center',
-              paddingBottom: 32,
             } : {
+              paddingTop: 40,
               paddingBottom: 32,
             }
           }
@@ -112,30 +110,6 @@ export function History() {
             <EmptyList />
           }
         />
-      </VStack>
-      <VStack
-        pt="$6"
-        pb="$9"
-        px="$6"
-        bg="$base100"
-        gap="$3"
-        borderWidth={1}
-        borderColor="$base500"
-        borderTopLeftRadius="$3xl"
-        borderTopRightRadius="$3xl"
-      >
-        <Button
-          title="Limpar senhas"
-          isDisabled={passwords.length < 1}
-          sx={{
-            ":disabled": {
-              opacity: 0.6
-            }
-          }}
-          onPress={handleClearPasswords}
-        >
-          <Trash weight="bold" color="#FFF" />
-        </Button>
       </VStack>
     </>
   )

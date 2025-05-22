@@ -130,7 +130,7 @@ export function Home() {
               h="$12"
               borderRadius="$md"
               type="secondary"
-              isDisabled={isPassCopied}
+              isDisabled={isPassCopied || !password}
               sx={{
                 ":disabled": {
                   opacity: 0.6
