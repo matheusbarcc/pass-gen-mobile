@@ -5,9 +5,10 @@ type Props = ComponentProps<typeof InputField> & {
   errorMessage?: string | null
   isInvalid?: boolean
   isReadOnly?: boolean
+  variant?: 'primary' | 'secondary'
 }
 
-export function Input({ isReadOnly, errorMessage = null, isInvalid = false, ...rest }: Props) {
+export function Input({ isReadOnly, errorMessage = null, isInvalid = false, variant = 'primary', ...rest }: Props) {
   const invalid = !!errorMessage || isInvalid
 
   return (
@@ -30,7 +31,7 @@ export function Input({ isReadOnly, errorMessage = null, isInvalid = false, ...r
         opacity={isReadOnly ? 0.5 : 1}
       >
         <InputField
-          bg="$white"
+          bg={variant === 'primary' ? "$white" : '$base300'}
           px="$4"
           color='$black'
           fontFamily='$body'

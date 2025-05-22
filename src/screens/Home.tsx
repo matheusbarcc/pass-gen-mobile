@@ -16,6 +16,7 @@ import { generatePassword } from "../utils/generatePassword";
 import { useAuth } from "../hooks/useAuth";
 import { AppError } from "../utils/AppError";
 import { ToastMessage } from "../components/ToastMessage";
+import { SaveItemForm } from "../components/SaveItemForm";
 
 export function Home() {
   const [password, setPassword] = useState('')
@@ -37,6 +38,20 @@ export function Home() {
   function handleCopyPassword() {
     password && Clipboard.setStringAsync(password)
     setClipboard(password)
+
+    if (password.length > 1) {
+      toast.show({
+        placement: 'top',
+        duration: 1000 * 2,
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Senha copiada!"
+            action="success"
+          />
+        )
+      })
+    }
   }
 
   async function handleSignOut() {
@@ -156,6 +171,7 @@ export function Home() {
         <Button title="Salvar" type="secondary">
           <FloppyDisk weight="bold" color="#103214" />
         </Button>
+        <SaveItemForm generatedPassword={password} />
       </VStack>
     </>
   )
