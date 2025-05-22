@@ -168,10 +168,7 @@ export function Home() {
         borderTopRightRadius="$3xl"
       >
         <Button title="Gerar senha" onPress={handleNewPassword} />
-        <Button title="Salvar" type="secondary">
-          <FloppyDisk weight="bold" color="#103214" />
-        </Button>
-        <SaveItemForm generatedPassword={password} />
+        <SaveItemForm generatedPassword={password} isDisabled={!password} />
       </VStack>
     </>
   )

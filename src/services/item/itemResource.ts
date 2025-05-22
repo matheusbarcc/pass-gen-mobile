@@ -1,13 +1,14 @@
 import { api } from "../../lib/axios"
 
-type CreateItemRequest = {
-  label: string
-  password: string
+async function createItem(label: string, password: string) {
+  try {
+    await api.post('/items', {
+      label,
+      password
+    })
+  } catch (error) {
+    throw error
+  }
 }
 
-async function createItem({ label, password }: CreateItemRequest) {
-  await api.post('/items', {
-    label,
-    password
-  })
-}
+export { createItem }

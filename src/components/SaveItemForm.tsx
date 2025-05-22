@@ -6,6 +6,7 @@ import { Button } from './Button'
 import { Drawer } from './Drawer'
 
 import CaretDown from "phosphor-react-native/src/icons/CaretDown"
+import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk"
 
 import * as yup from 'yup'
 import { InferType } from 'yup'
@@ -13,9 +14,11 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AppError } from '../utils/AppError'
 import { ToastMessage } from './ToastMessage'
+import { createItem } from '../services/item/itemResource'
 
 type Props = {
   generatedPassword: string
+  isDisabled?: boolean
 }
 
 const saveItemSchema = yup.object({
@@ -25,7 +28,7 @@ const saveItemSchema = yup.object({
 
 type SaveItemData = InferType<typeof saveItemSchema>
 
-export function SaveItemForm({ generatedPassword }: Props) {
+export function SaveItemForm({ generatedPassword, isDisabled = false }: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
@@ -39,7 +42,20 @@ export function SaveItemForm({ generatedPassword }: Props) {
 
   async function handleSaveItem(data: SaveItemData) {
     try {
-      console.log(data)
+      await createItem(data.label, data.password)
+
+      closeDrawer()
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Senha salva com sucesso!"
+            action="success"
+          />
+        )
+      })
     } catch (error) {
       const isAppError = error instanceof AppError
 
@@ -76,11 +92,10 @@ export function SaveItemForm({ generatedPassword }: Props) {
   }, [isDrawerOpen, generatedPassword, reset])
 
   return (
-    <Box flex={1} bg="transparent">
-      <Button
-        title="Open Drawer"
-        onPress={toggleDrawer}
-      />
+    <Box bg="transparent">
+      <Button title="Salvar" type="secondary" onPress={toggleDrawer} isDisabled={isDisabled}>
+        <FloppyDisk weight="bold" color="#103214" />
+      </Button>
 
       <Drawer
         isOpen={isDrawerOpen}
@@ -134,10 +149,12 @@ export function SaveItemForm({ generatedPassword }: Props) {
           </VStack>
 
           <Button
-            title="Salvar senha"
+            title="Salvar"
             onPress={handleSubmit(handleSaveItem)}
             isLoading={isSubmitting}
-          />
+          >
+            <FloppyDisk weight="bold" color="#FFF" />
+          </Button>
         </VStack>
       </Drawer>
     </Box>

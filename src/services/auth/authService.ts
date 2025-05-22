@@ -2,7 +2,6 @@ import * as authResource from './authResource'
 
 async function signIn(email: string, password: string) {
   const data = await authResource.signIn(email, password)
-  console.log(data.token)
 
   return data
 }
