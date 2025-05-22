@@ -54,10 +54,11 @@ export function SignUp() {
 
       toast.show({
         placement: 'top',
+        duration: 1000 * 2,
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title="Conta criada com sucesso! Bem-vindo(a)!"
+            title="Conta criada com sucesso!"
             action="success"
           />
         )
