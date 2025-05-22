@@ -17,7 +17,7 @@ type Props = {
   item: ItemDTO
   clipboard: PasswordClipboard
   copyPassword: (id: string, value: string) => void
-  removePassword: (password: string) => void
+  removePassword: (itemId: string) => void
 }
 
 export function ItemCard({ item, clipboard, copyPassword, removePassword }: Props) {

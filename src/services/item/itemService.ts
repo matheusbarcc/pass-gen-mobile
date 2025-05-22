@@ -19,4 +19,8 @@ async function fetchUserItems() {
   return items
 }
 
-export { ItemDTO, createItem, fetchUserItems }
+async function deleteItemService(itemId: string) {
+  await itemResource.deleteItem(itemId)
+}
+
+export { ItemDTO, createItem, fetchUserItems, deleteItemService }

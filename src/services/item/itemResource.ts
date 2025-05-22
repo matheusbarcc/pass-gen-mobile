@@ -21,4 +21,12 @@ async function fetchUserItems() {
   }
 }
 
-export { createItem, fetchUserItems }
+async function deleteItem(itemId: string) {
+  try {
+    await api.delete(`/items/${itemId}`)
+  } catch (error) {
+    throw error
+  }
+}
+
+export { createItem, fetchUserItems, deleteItem }

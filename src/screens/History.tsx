@@ -1,14 +1,16 @@
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
+import { Heading, HStack, Pressable, useToast, VStack } from "@gluestack-ui/themed";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
 
 import { EmptyList } from "../components/EmptyList";
 import { ItemCard } from "../components/ItemCard";
 
-import { fetchUserItems, ItemDTO } from "../services/item/itemService";
+import { deleteItemService, fetchUserItems, ItemDTO } from "../services/item/itemService";
+import { AppError } from "../utils/AppError";
+import { ToastMessage } from "../components/ToastMessage";
 
 export type PasswordClipboard = {
   id: string
@@ -19,16 +21,69 @@ export function History() {
   const [items, setItems] = useState<ItemDTO[]>([])
   const [clipboard, setClipboard] = useState<PasswordClipboard>({} as PasswordClipboard)
 
+  const toast = useToast()
+
   const { goBack } = useNavigation()
 
   async function fetchPasswords() {
-    const items = await fetchUserItems()
+    try {
+      const items = await fetchUserItems()
 
-    setItems(items)
+      setItems(items)
+
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError ? error.message : 'Não foi possível buscar as senhas. Tente novamente mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+          />
+        )
+      })
+    }
   }
 
-  async function removePassword(value: string) {
-    // await removePasswordByValue(value)
+  async function removePassword(itemId: string) {
+    try {
+      Alert.alert('Excluir senha', 'A senha não poderá ser recuperada, você deseja excluí-la?', [
+        {
+          text: 'Sim',
+          onPress: async () => {
+            await deleteItemService(itemId)
+
+            setItems((state) => state.filter(state => state.id !== itemId))
+          },
+          style: 'destructive'
+        },
+        {
+          text: 'Não',
+          onPress: () => { },
+          style: 'cancel'
+        }
+      ])
+
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError ? error.message : 'Não foi possível excluir a senha. Tente novamente mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+          />
+        )
+      })
+    }
   }
 
   function handleGoBack() {
