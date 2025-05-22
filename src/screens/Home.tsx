@@ -1,21 +1,29 @@
-import { useState } from "react";
-import { Center, HStack, Text, VStack } from "@gluestack-ui/themed";
+import { Center, HStack, Text, useToast, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from 'expo-clipboard';
+import { useState } from "react";
 
 import Check from "phosphor-react-native/src/icons/Check";
-import Copy from "phosphor-react-native/src/icons/Copy";
 import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
-import Lock from "phosphor-react-native/src/icons/Lock";
+import SignOut from "phosphor-react-native/src/icons/SignOut";
+import Copy from "phosphor-react-native/src/icons/Copy";
 import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
+import Lock from "phosphor-react-native/src/icons/Lock";
 
-import { Button } from "../components/Button"
+import { Button } from "../components/Button";
 
 import { generatePassword } from "../utils/generatePassword";
+import { useAuth } from "../hooks/useAuth";
+import { AppError } from "../utils/AppError";
+import { ToastMessage } from "../components/ToastMessage";
 
 export function Home() {
   const [password, setPassword] = useState('')
   const [clipboard, setClipboard] = useState('')
+
+  const { signOut } = useAuth()
+
+  const toast = useToast()
 
   const { navigate } = useNavigation()
 
@@ -29,6 +37,27 @@ export function Home() {
   function handleCopyPassword() {
     password && Clipboard.setStringAsync(password)
     setClipboard(password)
+  }
+
+  async function handleSignOut() {
+    try {
+      await signOut()
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError ? error.message : 'Não foi possível sair da conta. Tente novamente mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+          />
+        )
+      })
+    }
   }
 
   function handleHistory() {
@@ -48,15 +77,11 @@ export function Home() {
             PassGen
           </Text>
 
-          <Button
-            h="$12"
-            w="$12"
-            borderRadius="$lg"
-            bg="$green700"
-            alignItems="center"
-            justifyContent="center"
-            onPress={handleHistory}
-          >
+          <Button h="$12" w="$12" type="secondary" onPress={handleSignOut}>
+            <SignOut color="#103214" />
+          </Button>
+
+          <Button h="$12" w="$12" onPress={handleHistory}>
             <ClockCounterClockwise color="#FFF" />
           </Button>
         </HStack>

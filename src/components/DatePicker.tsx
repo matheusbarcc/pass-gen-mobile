@@ -42,18 +42,14 @@ export function DatePicker({
         h="$14"
         px="$4"
         borderWidth="$1"
-        borderColor='$base500'
         borderRadius="$lg"
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between"
+        borderColor={invalid ? "$red500" : "$base500"}
         $focus={{
           borderWidth: 1,
           borderColor: invalid ? "$red500" : "$green700"
-        }}
-        $invalid={{
-          borderWidth: 1,
-          borderColor: "$red500"
         }}
         onPress={showDatepicker}
       >

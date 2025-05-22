@@ -16,8 +16,8 @@ export type AuthContextDataProps = {
 }
 
 interface AuthenticatedProps {
-    token: string | null
-    authenticated: boolean | null
+  token: string | null
+  authenticated: boolean | null
 }
 
 export type AuthContextProviderProps = {
@@ -29,8 +29,8 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLoadingStoredToken, setIsLoadingStoredToken] = useState(false)
   const [authState, setAuthState] = useState<AuthenticatedProps>({
-          token: null,
-          authenticated: null
+    token: null,
+    authenticated: null
   })
 
   async function updateToken(token: string) {
@@ -44,8 +44,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       if (data) {
         updateToken(data.token)
         setAuthState({
-            authenticated: true,
-            token: data.token
+          authenticated: true,
+          token: data.token
         })
       }
     } catch (error) {
@@ -55,9 +55,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signUp({ name, email, birthday, password }: SignUpRequest) {
     try {
-        await authService.signUp({ name, email, birthday, password })
+      await authService.signUp({ name, email, birthday, password })
     } catch (error) {
-        throw error
+      throw error
     }
   }
 
@@ -74,7 +74,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-        setIsLoadingStoredToken(false)
+      setIsLoadingStoredToken(false)
     }
   }
 
@@ -87,14 +87,14 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       if (token) {
         await updateToken(token)
         setAuthState({
-            token,
-            authenticated: true
+          token,
+          authenticated: true
         })
       }
     } catch (error) {
       throw error
     } finally {
-        setIsLoadingStoredToken(false)
+      setIsLoadingStoredToken(false)
     }
   }
 
