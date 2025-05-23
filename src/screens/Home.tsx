@@ -1,4 +1,4 @@
-import { Center, HStack, Text, useToast, VStack } from "@gluestack-ui/themed";
+import { Center, HStack, Pressable, Text, useToast, VStack } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from 'expo-clipboard';
 import { useState } from "react";
@@ -11,13 +11,14 @@ import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 import Lock from "phosphor-react-native/src/icons/Lock";
 
 import { Button } from "../components/Button";
+import { ToastMessage } from "../components/ToastMessage";
+import { SaveItemForm } from "../components/SaveItemForm";
+import { PasswordLengthSelector } from "../components/PasswordLengthSelector";
 
 import { generatePassword } from "../utils/generatePassword";
 import { useAuth } from "../hooks/useAuth";
 import { AppError } from "../utils/AppError";
-import { ToastMessage } from "../components/ToastMessage";
-import { SaveItemForm } from "../components/SaveItemForm";
-import { PasswordLengthSelector } from "../components/PasswordLengthSelector";
+
 
 export function Home() {
   const [passwordLength, setPasswordLength] = useState<number>(8)
@@ -81,30 +82,23 @@ export function Home() {
     setPasswordLength(length)
   }
 
-  function handleHistory() {
-    navigate('history')
-  }
-
   return (
     <>
       <VStack
-        pt="$11"
+        pt="$14"
         px="$6"
         bg="$background"
         flex={1}
       >
         <HStack alignItems="center" justifyContent="space-between">
-          <Text fontSize="$5xl" fontFamily="$heading" color="$green700">
-            PassGen
-          </Text>
+          <VStack>
+            <Text fontFamily="$bold" color="$green800" fontSize="$lg">Matheus</Text>
+            <Text color="$green800" mt="-$1">matheus@email.com</Text>
+          </VStack>
 
-          <Button h="$12" w="$12" type="secondary" onPress={handleSignOut}>
-            <SignOut color="#103214" />
-          </Button>
-
-          <Button h="$12" w="$12" onPress={handleHistory}>
-            <ClockCounterClockwise color="#FFF" />
-          </Button>
+          <Pressable onPress={handleSignOut}>
+            <SignOut size={28} weight="bold" color="#071508" />
+          </Pressable>
         </HStack>
 
         <VStack
@@ -172,14 +166,9 @@ export function Home() {
       </VStack>
       <VStack
         pt="$6"
-        pb="$9"
+        pb="$6"
         px="$6"
-        bg="$base100"
         gap="$3"
-        borderWidth={1}
-        borderColor="$base500"
-        borderTopLeftRadius="$3xl"
-        borderTopRightRadius="$3xl"
       >
         <Button title="Gerar senha" onPress={handleNewPassword} />
         <SaveItemForm generatedPassword={password} isDisabled={!password} />

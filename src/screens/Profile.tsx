@@ -1,5 +1,120 @@
-import { View } from "react-native";
+import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigation } from "@react-navigation/native";
+
+import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
+import { Controller, useForm } from "react-hook-form";
+
+import * as yup from 'yup'
+import { InferType } from 'yup'
+import { Input } from "../components/Input";
+import { DatePicker } from "../components/DatePicker";
+import { Button } from "../components/Button";
+
+const updateProfileSchema = yup.object({
+  name: yup.string().optional(),
+  email: yup.string()
+    .optional()
+    .email(),
+  birthday: yup.date().required()
+})
+
+type updateProfileData = InferType<typeof updateProfileSchema>
 
 export function Profile() {
-  return <View />
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    resolver: yupResolver(updateProfileSchema)
+  })
+
+  const { navigate } = useNavigation()
+
+  async function handleUpdateProfile(data: updateProfileData) {
+    console.log(data)
+  }
+
+  function handleGoBack() {
+    navigate("home")
+  }
+
+  return (
+    <>
+      <HStack
+        bg="$base100"
+        pt="$14"
+        pb="$7"
+        justifyContent="center"
+        borderWidth={1}
+        borderColor="$base500"
+        borderBottomLeftRadius="$3xl"
+        borderBottomRightRadius="$3xl"
+        position="relative"
+      >
+        <Pressable
+          position="absolute"
+          left={24}
+          bottom={32}
+          onPress={handleGoBack}
+        >
+          <ArrowLeft
+            color="#103214"
+          />
+        </Pressable>
+
+        <Heading
+          fontSize="$xl"
+          color="$green700"
+        >
+          Perfil
+        </Heading>
+      </HStack>
+
+      <VStack px="$6" pt="$10">
+        <Controller
+          name="name"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="Nome"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.name?.message}
+            />
+          )}
+        />
+
+        <Controller
+          name="email"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="E-mail"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.email?.message}
+            />
+          )}
+        />
+
+        <Controller
+          name="birthday"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <DatePicker
+              value={value}
+              onChange={onChange}
+              placeholder="Data de nascimento"
+              errorMessage={errors.birthday?.message}
+            />
+          )}
+        />
+
+        <Button
+          mt="$2"
+          title="Atualizar informações"
+          onPress={handleSubmit(handleUpdateProfile)}
+          isLoading={isSubmitting}
+        />
+      </VStack>
+    </>
+  )
 }

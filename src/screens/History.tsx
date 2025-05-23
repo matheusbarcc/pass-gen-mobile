@@ -25,7 +25,15 @@ export function History() {
 
   const toast = useToast()
 
-  const { goBack } = useNavigation()
+  const { navigate } = useNavigation()
+
+  function handleGoBack() {
+    navigate("home")
+  }
+
+  function copyPassword(id: string, value: string) {
+    setClipboard({ id, value })
+  }
 
   async function fetchPasswords() {
     try {
@@ -91,55 +99,40 @@ export function History() {
     }
   }
 
-  function handleGoBack() {
-    goBack()
-  }
-
   useEffect(() => {
     fetchPasswords()
   }, [])
-
-  function copyPassword(id: string, value: string) {
-    setClipboard({ id, value })
-  }
 
   return (
     <>
       <HStack
         bg="$base100"
-        pt="$11"
+        pt="$14"
         pb="$7"
-        alignItems="flex-end"
         justifyContent="center"
         borderWidth={1}
         borderColor="$base500"
         borderBottomLeftRadius="$3xl"
         borderBottomRightRadius="$3xl"
+        position="relative"
       >
-        <HStack
-          w="$full"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
+        <Pressable
+          position="absolute"
+          left={24}
+          bottom={32}
+          onPress={handleGoBack}
         >
-          <Pressable
-            position="absolute"
-            left={24}
-            onPress={handleGoBack}
-          >
-            <ArrowLeft
-              color="#103214"
-            />
-          </Pressable>
+          <ArrowLeft
+            color="#103214"
+          />
+        </Pressable>
 
-          <Heading
-            textTransform="uppercase"
-            fontSize="$xl"
-            color="$green700"
-          >
-            Histórico
-          </Heading>
-        </HStack>
+        <Heading
+          fontSize="$xl"
+          color="$green700"
+        >
+          Histórico
+        </Heading>
       </HStack>
       {isLoading ? <Loading /> : (
         <VStack
