@@ -1,6 +1,6 @@
 import { Alert, FlatList } from "react-native";
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Heading, HStack, Pressable, useToast, VStack } from "@gluestack-ui/themed";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
@@ -25,14 +25,22 @@ export function History() {
 
   const toast = useToast()
 
-  const { goBack } = useNavigation()
+  const { navigate } = useNavigation()
+
+  function handleGoBack() {
+    navigate("home")
+  }
+
+  function copyPassword(id: string, value: string) {
+    setClipboard({ id, value })
+  }
 
   async function fetchPasswords() {
     try {
       setIsLoading(true)
-      const items = await fetchUserItems()
+      const response = await fetchUserItems()
 
-      setItems(items)
+      setItems(response)
 
     } catch (error) {
       const isAppError = error instanceof AppError
@@ -91,55 +99,42 @@ export function History() {
     }
   }
 
-  function handleGoBack() {
-    goBack()
-  }
-
-  useEffect(() => {
-    fetchPasswords()
-  }, [])
-
-  function copyPassword(id: string, value: string) {
-    setClipboard({ id, value })
-  }
+  useFocusEffect(
+    useCallback(() => {
+      fetchPasswords()
+    }, [])
+  )
 
   return (
     <>
       <HStack
         bg="$base100"
-        pt="$11"
+        pt="$14"
         pb="$7"
-        alignItems="flex-end"
         justifyContent="center"
         borderWidth={1}
         borderColor="$base500"
         borderBottomLeftRadius="$3xl"
         borderBottomRightRadius="$3xl"
+        position="relative"
       >
-        <HStack
-          w="$full"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
+        <Pressable
+          position="absolute"
+          left={24}
+          bottom={32}
+          onPress={handleGoBack}
         >
-          <Pressable
-            position="absolute"
-            left={24}
-            onPress={handleGoBack}
-          >
-            <ArrowLeft
-              color="#103214"
-            />
-          </Pressable>
+          <ArrowLeft
+            color="#103214"
+          />
+        </Pressable>
 
-          <Heading
-            textTransform="uppercase"
-            fontSize="$xl"
-            color="$green700"
-          >
-            Histórico
-          </Heading>
-        </HStack>
+        <Heading
+          fontSize="$xl"
+          color="$green700"
+        >
+          Histórico
+        </Heading>
       </HStack>
       {isLoading ? <Loading /> : (
         <VStack

@@ -1,37 +1,35 @@
-import { Center, HStack, Text, useToast, VStack } from "@gluestack-ui/themed";
-import { useNavigation } from "@react-navigation/native";
-import * as Clipboard from 'expo-clipboard';
 import { useState } from "react";
+import * as Clipboard from 'expo-clipboard';
+import { Center, HStack, Pressable, Text, useToast, VStack } from "@gluestack-ui/themed";
 
 import Check from "phosphor-react-native/src/icons/Check";
-import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
-import SignOut from "phosphor-react-native/src/icons/SignOut";
 import Copy from "phosphor-react-native/src/icons/Copy";
-import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 import Lock from "phosphor-react-native/src/icons/Lock";
+import SignOut from "phosphor-react-native/src/icons/SignOut";
 
 import { Button } from "../components/Button";
+import { PasswordLengthSelector } from "../components/PasswordLengthSelector";
+import { SaveItemForm } from "../components/SaveItemForm";
+import { ToastMessage } from "../components/ToastMessage";
 
-import { generatePassword } from "../utils/generatePassword";
 import { useAuth } from "../hooks/useAuth";
 import { AppError } from "../utils/AppError";
-import { ToastMessage } from "../components/ToastMessage";
-import { SaveItemForm } from "../components/SaveItemForm";
+import { generatePassword } from "../utils/generatePassword";
+
 
 export function Home() {
+  const [passwordLength, setPasswordLength] = useState<number>(8)
   const [password, setPassword] = useState('')
   const [clipboard, setClipboard] = useState('')
 
-  const { signOut } = useAuth()
+  const { user, signOut } = useAuth()
 
   const toast = useToast()
-
-  const { navigate } = useNavigation()
 
   const isPassCopied = clipboard === password && clipboard !== ""
 
   async function handleNewPassword() {
-    const newPassword = await generatePassword()
+    const newPassword = await generatePassword(passwordLength)
     setPassword(newPassword)
   }
 
@@ -75,30 +73,27 @@ export function Home() {
     }
   }
 
-  function handleHistory() {
-    navigate('history')
+  function handleSwitchPasswordLength(length: number) {
+    setPasswordLength(length)
   }
 
   return (
     <>
       <VStack
-        pt="$11"
+        pt="$14"
         px="$6"
         bg="$background"
         flex={1}
       >
         <HStack alignItems="center" justifyContent="space-between">
-          <Text fontSize="$5xl" fontFamily="$heading" color="$green700">
-            PassGen
-          </Text>
+          <VStack>
+            <Text fontFamily="$bold" color="$green800" fontSize="$lg">{user.name}</Text>
+            <Text color="$green800" mt="-$1">{user.email}</Text>
+          </VStack>
 
-          <Button h="$12" w="$12" type="secondary" onPress={handleSignOut}>
-            <SignOut color="#103214" />
-          </Button>
-
-          <Button h="$12" w="$12" onPress={handleHistory}>
-            <ClockCounterClockwise color="#FFF" />
-          </Button>
+          <Pressable onPress={handleSignOut}>
+            <SignOut size={28} weight="bold" color="#071508" />
+          </Pressable>
         </HStack>
 
         <VStack
@@ -145,27 +140,30 @@ export function Home() {
               )}
             </Button>
           </HStack>
-          <Text
-            w="$64"
-            mt="$2"
-            textAlign="center"
-            fontSize="$sm"
-            color="$base700"
-          >
-            As senhas geradas são únicas, você pode vê-las no histórico.
-          </Text>
+          <HStack mt="$3" gap="$3">
+            <PasswordLengthSelector
+              title="6 dígitos"
+              isActive={passwordLength === 6}
+              onPress={() => handleSwitchPasswordLength(6)}
+            />
+            <PasswordLengthSelector
+              title="8 dígitos"
+              isActive={passwordLength === 8}
+              onPress={() => handleSwitchPasswordLength(8)}
+            />
+            <PasswordLengthSelector
+              title="10 dígitos"
+              isActive={passwordLength === 10}
+              onPress={() => handleSwitchPasswordLength(10)}
+            />
+          </HStack>
         </VStack>
       </VStack>
       <VStack
         pt="$6"
-        pb="$9"
+        pb="$6"
         px="$6"
-        bg="$base100"
         gap="$3"
-        borderWidth={1}
-        borderColor="$base500"
-        borderTopLeftRadius="$3xl"
-        borderTopRightRadius="$3xl"
       >
         <Button title="Gerar senha" onPress={handleNewPassword} />
         <SaveItemForm generatedPassword={password} isDisabled={!password} />

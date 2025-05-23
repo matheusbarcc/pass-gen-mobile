@@ -4,7 +4,7 @@ import { DateTimePickerAndroid, DateTimePickerEvent } from "@react-native-commun
 import CalendarDots from "phosphor-react-native/src/icons/CalendarDots";
 
 type DatePickerProps = {
-  value: Date | null;
+  value?: Date | null;
   onChange: (date: Date) => void;
   placeholder?: string;
   isInvalid?: boolean
@@ -28,7 +28,7 @@ export function DatePicker({
 
   function showDatepicker() {
     DateTimePickerAndroid.open({
-      value: value || new Date(),
+      value: value ? new Date(value) : new Date(),
       maximumDate: new Date(),
       onChange: handleChange,
       mode: "date",
