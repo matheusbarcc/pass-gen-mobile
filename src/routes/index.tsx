@@ -7,12 +7,12 @@ import { gluestackUIConfig } from "../../config/gluestack-ui.config";
 import { AppRoutes } from "./app.routes";
 
 export function Routes() {
-  const { authState, isLoadingStoredToken } = useAuth()
+  const { authState, isLoading } = useAuth()
 
   const theme = DefaultTheme
   theme.colors.background = gluestackUIConfig.tokens.colors.background
 
-  if (isLoadingStoredToken) {
+  if (isLoading) {
     return <Loading />
   }
 

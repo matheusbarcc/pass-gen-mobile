@@ -1,23 +1,20 @@
-import { Center, HStack, Pressable, Text, useToast, VStack } from "@gluestack-ui/themed";
-import { useNavigation } from "@react-navigation/native";
-import * as Clipboard from 'expo-clipboard';
 import { useState } from "react";
+import * as Clipboard from 'expo-clipboard';
+import { Center, HStack, Pressable, Text, useToast, VStack } from "@gluestack-ui/themed";
 
 import Check from "phosphor-react-native/src/icons/Check";
-import ClockCounterClockwise from "phosphor-react-native/src/icons/ClockCounterClockwise";
-import SignOut from "phosphor-react-native/src/icons/SignOut";
 import Copy from "phosphor-react-native/src/icons/Copy";
-import FloppyDisk from "phosphor-react-native/src/icons/FloppyDisk";
 import Lock from "phosphor-react-native/src/icons/Lock";
+import SignOut from "phosphor-react-native/src/icons/SignOut";
 
 import { Button } from "../components/Button";
-import { ToastMessage } from "../components/ToastMessage";
-import { SaveItemForm } from "../components/SaveItemForm";
 import { PasswordLengthSelector } from "../components/PasswordLengthSelector";
+import { SaveItemForm } from "../components/SaveItemForm";
+import { ToastMessage } from "../components/ToastMessage";
 
-import { generatePassword } from "../utils/generatePassword";
 import { useAuth } from "../hooks/useAuth";
 import { AppError } from "../utils/AppError";
+import { generatePassword } from "../utils/generatePassword";
 
 
 export function Home() {
@@ -25,11 +22,9 @@ export function Home() {
   const [password, setPassword] = useState('')
   const [clipboard, setClipboard] = useState('')
 
-  const { signOut } = useAuth()
+  const { user, signOut } = useAuth()
 
   const toast = useToast()
-
-  const { navigate } = useNavigation()
 
   const isPassCopied = clipboard === password && clipboard !== ""
 
@@ -92,8 +87,8 @@ export function Home() {
       >
         <HStack alignItems="center" justifyContent="space-between">
           <VStack>
-            <Text fontFamily="$bold" color="$green800" fontSize="$lg">Matheus</Text>
-            <Text color="$green800" mt="-$1">matheus@email.com</Text>
+            <Text fontFamily="$bold" color="$green800" fontSize="$lg">{user.name}</Text>
+            <Text color="$green800" mt="-$1">{user.email}</Text>
           </VStack>
 
           <Pressable onPress={handleSignOut}>

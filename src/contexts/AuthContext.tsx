@@ -1,14 +1,21 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+
 import { api } from "../lib/axios";
+
 import { SignUpRequest } from "../services/auth/authResource";
+import { UserDTO } from "../services/user/userService";
 
 import * as authService from '../services/auth/authService';
+import * as userService from '../services/user/userService';
+import { getItem, removeItem } from "../storage/localStorage";
+import { USER_STORAGE } from "../storage/storageConfig";
 
 export type AuthContextDataProps = {
   signIn: (email: string, password: string) => Promise<any>
   signUp: (user: SignUpRequest) => Promise<void>
   signOut: () => Promise<void>
-  isLoadingStoredToken: boolean
+  user: UserDTO
+  isLoading: boolean
   authState?: {
     token: string | null
     authenticated: boolean | null
@@ -27,7 +34,8 @@ export type AuthContextProviderProps = {
 export const AuthContext = createContext<AuthContextDataProps>({} as AuthContextDataProps);
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const [isLoadingStoredToken, setIsLoadingStoredToken] = useState(false)
+  const [user, setUser] = useState<UserDTO>({} as UserDTO)
+  const [isLoading, setIsLoading] = useState(false)
   const [authState, setAuthState] = useState<AuthenticatedProps>({
     token: null,
     authenticated: null
@@ -48,6 +56,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
           token: data.token
         })
       }
+
+      if (data) {
+        const user = await userService.getAuthenticatedUserService()
+        setUser(user)
+      }
+      
     } catch (error) {
       throw error
     }
@@ -63,9 +77,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signOut() {
     try {
-      setIsLoadingStoredToken(true)
+      setIsLoading(true)
 
       await authService.signOut()
+
+      setUser({} as UserDTO)
+      await removeItem(USER_STORAGE)
 
       setAuthState({
         token: null,
@@ -74,13 +91,31 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-      setIsLoadingStoredToken(false)
+      setIsLoading(false)
+    }
+  }
+
+  async function loadUserData() {
+    try {
+      setIsLoading(true)
+
+      const storedUser = await getItem(USER_STORAGE)
+
+      const user: UserDTO = storedUser ? JSON.parse(storedUser) : {}
+
+      if (user) {
+        setUser(user)
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
   async function loadToken() {
     try {
-      setIsLoadingStoredToken(true)
+      setIsLoading(true)
 
       const token = await authService.getAuthToken()
 
@@ -94,12 +129,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-      setIsLoadingStoredToken(false)
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
     loadToken()
+    loadUserData()
   }, [])
 
   return (
@@ -107,7 +143,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       signIn,
       signUp,
       signOut,
-      isLoadingStoredToken,
+      user,
+      isLoading,
       authState
     }}>
       {children}
