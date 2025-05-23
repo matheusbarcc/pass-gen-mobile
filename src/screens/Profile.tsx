@@ -1,6 +1,6 @@
 import { Heading, HStack, Pressable, useToast, VStack } from "@gluestack-ui/themed";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
 import { Controller, useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { Button } from "../components/Button";
 import { useAuth } from "../hooks/useAuth";
 import { AppError } from "../utils/AppError";
 import { ToastMessage } from "../components/ToastMessage";
+import { useCallback } from "react";
 
 const updateProfileSchema = yup.object({
   name: yup.string().required(),
@@ -27,12 +28,12 @@ type updateProfileData = InferType<typeof updateProfileSchema>
 export function Profile() {
   const { user, updateUser } = useAuth()
 
-  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+  const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(updateProfileSchema),
     defaultValues: {
       name: user.name,
       email: user.email,
-      birthday: user.birthday ? new Date(user.birthday) : new Date()
+      birthday: new Date(user.birthday)
     }
   })
 
@@ -77,6 +78,16 @@ export function Profile() {
   function handleGoBack() {
     navigate("home")
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      reset({
+        name: user.name,
+        email: user.email,
+        birthday: new Date(user.birthday)
+      })
+    }, [user, reset])
+  )
 
   return (
     <>

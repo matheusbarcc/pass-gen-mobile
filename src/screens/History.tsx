@@ -1,6 +1,6 @@
 import { Alert, FlatList } from "react-native";
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Heading, HStack, Pressable, useToast, VStack } from "@gluestack-ui/themed";
 
 import ArrowLeft from "phosphor-react-native/src/icons/ArrowLeft";
@@ -99,9 +99,11 @@ export function History() {
     }
   }
 
-  useEffect(() => {
-    fetchPasswords()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      fetchPasswords()
+    }, [])
+  )
 
   return (
     <>
