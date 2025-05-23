@@ -117,7 +117,7 @@ export function Home() {
             />
             <Center>
               <Text fontFamily="$body" color="$black" fontSize="$xl">
-                {password ? password : <Text color='$base600' fontSize="$md">Senha</Text>}
+                {password ? password : <Text color='$base600' fontSize="$md">Gere sua senha</Text>}
               </Text>
             </Center>
             <Button

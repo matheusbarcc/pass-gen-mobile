@@ -15,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 const signInSchema = yup.object({
   email: yup.string().required('Preencha o e-mail.').email('O e-mail deve ser válido.'),
-  password: yup.string().required('Preencha a senha.').min(3, 'A senha possui no mínimo 3 dígitos.')
+  password: yup.string().required('Preencha a senha.')
 })
 
 type signInData = InferType<typeof signInSchema>
