@@ -3,17 +3,18 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../lib/axios";
 
 import { SignUpRequest } from "../services/auth/authResource";
-import { UserDTO } from "../services/user/userService";
+import { UserDTO } from "../services/user/userResource";
 
 import * as authService from '../services/auth/authService';
 import * as userService from '../services/user/userService';
-import { getItem, removeItem } from "../storage/localStorage";
+import { getItem, removeItem, setItem } from "../storage/localStorage";
 import { USER_STORAGE } from "../storage/storageConfig";
 
 export type AuthContextDataProps = {
   signIn: (email: string, password: string) => Promise<any>
   signUp: (user: SignUpRequest) => Promise<void>
   signOut: () => Promise<void>
+  updateUser: (data: UserDTO) => Promise<void>
   user: UserDTO
   isLoading: boolean
   authState?: {
@@ -95,6 +96,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function updateUser(data: UserDTO) {
+    try {
+      await userService.updateUserService(data)
+
+      setUser(data)
+      await setItem(USER_STORAGE, JSON.stringify(data))
+
+    } catch (error) {
+      throw error
+    }
+  }
+
   async function loadUserData() {
     try {
       setIsLoading(true)
@@ -143,6 +156,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       signIn,
       signUp,
       signOut,
+      updateUser,
       user,
       isLoading,
       authState

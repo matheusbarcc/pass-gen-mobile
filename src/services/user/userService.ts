@@ -1,17 +1,19 @@
 import * as userResource from './userResource'
 
-type UserDTO = {
-    name: string
-    email: string
-    birthday: string
-}
-
 async function getAuthenticatedUserService() {
   const data = await userResource.getAuthenticatedUser()
 
-  const user: UserDTO = data.user
+  const user: userResource.UserDTO = data.user
 
   return user
 }
 
-export { UserDTO, getAuthenticatedUserService }
+async function updateUserService({ name, email, birthday }: userResource.UserDTO) {
+  await userResource.updateUser({
+    name,
+    email,
+    birthday
+  })
+}
+
+export { getAuthenticatedUserService, updateUserService }

@@ -38,9 +38,9 @@ export function History() {
   async function fetchPasswords() {
     try {
       setIsLoading(true)
-      const items = await fetchUserItems()
+      const response = await fetchUserItems()
 
-      setItems(items)
+      setItems(response)
 
     } catch (error) {
       const isAppError = error instanceof AppError

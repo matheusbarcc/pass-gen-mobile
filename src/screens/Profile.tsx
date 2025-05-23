@@ -1,4 +1,4 @@
-import { Heading, HStack, Pressable, VStack } from "@gluestack-ui/themed";
+import { Heading, HStack, Pressable, useToast, VStack } from "@gluestack-ui/themed";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 
@@ -10,11 +10,14 @@ import { InferType } from 'yup'
 import { Input } from "../components/Input";
 import { DatePicker } from "../components/DatePicker";
 import { Button } from "../components/Button";
+import { useAuth } from "../hooks/useAuth";
+import { AppError } from "../utils/AppError";
+import { ToastMessage } from "../components/ToastMessage";
 
 const updateProfileSchema = yup.object({
-  name: yup.string().optional(),
+  name: yup.string().required(),
   email: yup.string()
-    .optional()
+    .required()
     .email(),
   birthday: yup.date().required()
 })
@@ -22,14 +25,53 @@ const updateProfileSchema = yup.object({
 type updateProfileData = InferType<typeof updateProfileSchema>
 
 export function Profile() {
+  const { user, updateUser } = useAuth()
+
   const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-    resolver: yupResolver(updateProfileSchema)
+    resolver: yupResolver(updateProfileSchema),
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+      birthday: user.birthday ? new Date(user.birthday) : new Date()
+    }
   })
+
+  const toast = useToast()
 
   const { navigate } = useNavigation()
 
   async function handleUpdateProfile(data: updateProfileData) {
-    console.log(data)
+    try {
+      await updateUser(data)
+
+      toast.show({
+        placement: 'top',
+        duration: 1000 * 2,
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Dados atualizados com sucesso!"
+            action="success"
+          />
+        )
+      })
+
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError ? error.message : 'Não foi possível atualizar os dados. Tente novamente mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+          />
+        )
+      })
+    }
   }
 
   function handleGoBack() {
